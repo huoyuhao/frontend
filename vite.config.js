@@ -70,7 +70,7 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    assetsDir: 'doppler',
+    assetsDir: 'resource',
     assetsInlineLimit: 4096, // 4kb
     sourcemap: !!isDev(),
     minify: isDev() ? 'esbuild' : 'terser',
