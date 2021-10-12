@@ -13,7 +13,7 @@
             placeholder="请选择"
             show-search
             option-filter-prop="label"
-            :options="materialArr"
+            :options="data && data.materialArr"
           />
       </a-form-item>
       <a-form-item label="RF标签码" name="tagStr">
@@ -34,6 +34,9 @@ import { message } from 'ant-design-vue';
 export default defineComponent({
   name: 'DProductEntryFactory',
   components: {  },
+  props: {
+    data: Object,
+  },
   setup() {
     const state = reactive({
       title: '出库',
@@ -47,15 +50,6 @@ export default defineComponent({
       rfTagCodeList: [],
       materialEntityAction: 1,
     });
-    const query = () => {
-      product({ api: '/material', method: 'get' }).then((res) => {
-        state.materialArr = res.map((item) => {
-          return { value: item.materialId, label: item.materialName };
-        });
-      })
-        .catch();
-    };
-    query();
     formItem.rfTagCodeList = computed(() => {
       return state.tagStr.trim().split(/[\n\s+,，；;]/g).filter((item) => {
         return item;

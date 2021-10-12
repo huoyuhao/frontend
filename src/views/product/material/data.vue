@@ -54,7 +54,6 @@ export default defineComponent({
       formData: {},
     });
     const api = '/material';
-    console.log(list);
 
     const columns = [];
     list.forEach((item) => {

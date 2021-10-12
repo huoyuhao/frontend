@@ -32,7 +32,7 @@ const product = {
       component: () => {
         return import('/@/views/product/materialParts/index.vue');
       },
-      meta: { title: '物料件', redirect: '/product/materialParts/entryFactory' },
+      meta: { title: '物料件', redirect: '/product/materialParts/list' },
     },
   ],
 };
