@@ -7,17 +7,11 @@
       class="d-form"
       :label-col="{ span: 4 }" :wrapper-col="{ span: 12 }"
     >
-      <a-form-item label="物料" name="materialId">
-          <a-select
-            v-model:value="formItem.materialId"
-            placeholder="请选择"
-            show-search
-            option-filter-prop="label"
-            :options="data && data.materialArr"
-          />
-      </a-form-item>
       <a-form-item label="RF标签码" name="tagStr">
         <a-textarea v-model:value="tagStr" placeholder="请输入RF标签码" :auto-size="{ minRows: 3, maxRows: 6 }" allow-clear />
+      </a-form-item>
+      <a-form-item label="物料位置" name="materialEntityPosition">
+        <a-input-number v-model:value="formItem.materialEntityPosition" placeholder="输入输入物料位置" />
       </a-form-item>
       <a-form-item :wrapper-col="{ span: 12, offset: 4 }">
         <a-button class="d-button" type="primary" @click="submit">提交</a-button>
@@ -45,9 +39,10 @@ export default defineComponent({
     const api = '/material/entity';
 
     const formItem = reactive({
-      materialId: '',
       rfTagCodeList: [],
       materialEntityAction: 3,
+      materialEntityPositionType: 3,
+      materialEntityPosition: null,
     });
     formItem.rfTagCodeList = computed(() => {
       return state.tagStr.trim().split(/[\n\s+,，；;]/g).filter((item) => {

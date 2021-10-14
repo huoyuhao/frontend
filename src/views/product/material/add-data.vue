@@ -36,11 +36,11 @@
   </a-modal>
 </template>
 <script>
-import { defineComponent, reactive, toRefs, ref } from 'vue';
+import { defineComponent, reactive, toRefs, ref, watch } from 'vue';
 import { product } from '/@/api/product/index';
 import { addFun } from '/@/utils/operate/index';
 import { list } from './config';
-import { useForm } from '@ant-design-vue/use';
+import { Form } from 'ant-design-vue';
 
 export default defineComponent({
   name: 'DAddMaterialData',
@@ -75,6 +75,7 @@ export default defineComponent({
       }
       formItem[dataIndex] = '';
     });
+    const { useForm } = Form;
     const { resetFields, validate, validateInfos } = useForm(formItem, ruleValidate);
 
     const { visibleModal, close, submit } = addFun(toRefs(props), emit, { resetFields, validate }, { formItem, api });
@@ -95,6 +96,16 @@ export default defineComponent({
       })
         .catch();
     };
+    watch(
+      () => {
+        return props.visible;
+      },
+      (visible) => {
+        if (visible) {
+          queryType();
+        }
+      },
+    );
     queryType();
     return {
       title,

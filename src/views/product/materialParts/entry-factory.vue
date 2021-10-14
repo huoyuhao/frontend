@@ -34,8 +34,7 @@
 <script>
 import { computed, defineComponent, reactive, toRefs } from 'vue';
 import { product } from '/@/api/product/index';
-import { message } from 'ant-design-vue';
-
+import { message, Form } from 'ant-design-vue';
 export default defineComponent({
   name: 'DProductEntryFactory',
   components: { },
@@ -52,10 +51,13 @@ export default defineComponent({
     const formItem = reactive({
       materialId: '',
       rfTagCodeList: [],
-      materialEntityElementNumber: 0,
       materialEntityAction: 0,
-      materialEntityPosition: 0,
+      materialEntityPositionType: 0,
+      materialEntityPosition: null,
+      materialEntityElementNumber: null,
     });
+    const { useForm } = Form;
+    const { resetFields } = useForm(formItem);
     formItem.rfTagCodeList = computed(() => {
       return state.tagStr.trim().split(/[\n\s+,，；;]/g).filter((item) => {
         return item;
@@ -65,6 +67,8 @@ export default defineComponent({
       state.loading = true;
       product({ api, method: 'put', data: formItem }).then(() => {
         message.success(`${state.title}成功`);
+        resetFields();
+        state.tagStr = '';
       })
         .catch();
     };

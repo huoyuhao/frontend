@@ -16,13 +16,13 @@ export const unit = [
 export const list = [
   { title: '唯一标识', dataIndex: 'materialId', rowKey: true, hideForm: true },
   { title: '物料代码', dataIndex: 'materialCode', required: true },
-  { title: '物料名称', dataIndex: 'materialName', required: true  },
-  { title: '规格型号', dataIndex: 'materialSap', required: true  },
+  { title: '物料名称', dataIndex: 'materialName', required: true },
+  { title: '规格型号', dataIndex: 'materialSap', required: true },
   { title: '物料属性', dataIndex: 'materialProperties', required: true  },
   { title: '物料类型', dataIndex: 'materialTypeId', hideTable: true, required: true, hideForm: true },
-  { title: '物料类型', dataIndex: 'materialTypeName', hideForm: true },
-  { title: '物料计量单位', dataIndex: 'materialUnitId', hideTable: true, required: true, hideForm: true  },
-  { title: '物料计量单位', dataIndex: 'materialUnitName', hideForm: true  },
+  { title: '物料类型', dataIndex: 'materialTypeName', hideForm: true, filter: true },
+  { title: '物料计量单位', dataIndex: 'materialUnitId', hideTable: true, required: true, hideForm: true, filter: true },
+  { title: '物料计量单位', dataIndex: 'materialUnitName', hideForm: true, filter: true },
   { title: '数量显示精度', dataIndex: 'accuracy', required: true  },
   { title: '备注', dataIndex: 'description' },
 ];

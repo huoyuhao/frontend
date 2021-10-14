@@ -57,12 +57,12 @@ export default defineComponent({
 
     const columns = [];
     list.forEach((item) => {
-      const { title, dataIndex, rowKey, hideTable } = item;
+      const { dataIndex, rowKey, hideTable } = item;
       if (rowKey) {
         state.rowKey = dataIndex;
       }
       if (!hideTable) {
-        columns.push({ title, dataIndex });
+        columns.push(item);
       }
     });
     columns.push({ title: '操作', dataIndex: 'action', align: 'center', width: '80px', slots: { customRender: 'action' } });

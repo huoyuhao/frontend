@@ -21,7 +21,7 @@
 import { defineComponent, reactive, toRefs } from 'vue';
 import { addFun } from '/@/utils/operate/index';
 import { type } from './config';
-import { useForm } from '@ant-design-vue/use';
+import { Form } from 'ant-design-vue';
 
 export default defineComponent({
   name: 'DAddWarehouseType',
@@ -56,6 +56,7 @@ export default defineComponent({
       }
       formItem[dataIndex] = '';
     });
+    const { useForm } = Form;
     const { resetFields, validate, validateInfos } = useForm(formItem, ruleValidate);
 
     const { visibleModal, close, submit } = addFun(toRefs(props), emit, { resetFields, validate }, { formItem, api });

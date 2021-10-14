@@ -15,12 +15,12 @@ export const unit = [
 
 export const list = [
   { title: '唯一标识', dataIndex: 'materialEntityId', rowKey: true },
-  { title: '物料ID', dataIndex: 'materialId' },
-  { title: '物料类型ID', dataIndex: 'materialTypeId' },
+  { title: '物料名称', dataIndex: 'materialName', filter: true },
+  { title: '物料类型ID', dataIndex: 'materialTypeId', filter: true },
   { title: '元素数量', dataIndex: 'materialEntityElementNumber' },
   { title: 'RF标签码', dataIndex: 'rfTagCode' },
-  { title: '物料状态', dataIndex: 'materialEntityStatus' },
-  { title: '物料位置', dataIndex: 'materialEntityPosition' },
+  { title: '物料状态', dataIndex: 'materialEntityStatus', filter: true },
+  { title: '物料位置', dataIndex: 'materialEntityPosition', sort: 'string', filter: true },
 ];
 
 export const trace = [

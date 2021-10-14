@@ -43,6 +43,9 @@ import { list, trace } from './config';
 export default defineComponent({
   name: 'DProductMaterialData',
   components: {  },
+  props: {
+    data: Object,
+  },
   setup() {
     const state = reactive({
       title: '物料件',
@@ -76,7 +79,6 @@ export default defineComponent({
       product({ api: `material/entity/trace?materialEntityId=${materialEntityId}`, method: 'get' }).then((res) => {
         state.loading1 = false;
         state.dataTrace = res;
-        console.log(res);
       })
         .catch();
     };
