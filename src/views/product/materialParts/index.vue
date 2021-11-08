@@ -18,6 +18,7 @@ export default defineComponent({
       { key: 'entryWarehouse', name: '入库', route: '/product/materialParts/entryWarehouse', file: import('./entry-warehouse.vue') },
       { key: 'outWarehouse', name: '出库', route: '/product/materialParts/outWarehouse', file: import('./out-warehouse.vue') },
       { key: 'exhaust', name: '用尽', route: '/product/materialParts/exhaust', file: import('./exhaust.vue') },
+      { key: 'bom', name: 'BOM', route: '/product/materialParts/bom', file: import('./bom.vue') },
     ];
     const active = ref('');
     watchEffect(() => {

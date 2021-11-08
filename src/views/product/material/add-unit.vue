@@ -1,7 +1,7 @@
 <template>
   <a-modal
     v-model:visible="visibleModal"
-    :title="title"
+    :title="isModify ? '修改' : '新增'"
     width="800px"
     cancelText="取消"
     okText="提交"
@@ -48,7 +48,6 @@ export default defineComponent({
     const api = '/material/unit';
     const formItem = reactive({});
     const ruleValidate = reactive({});
-    const title = props.isModify ? '修改' : '新增';
     unit.forEach((item) => {
       const { title, dataIndex } = item;
       if (item.required) {
@@ -62,7 +61,6 @@ export default defineComponent({
     const { visibleModal, close, submit } = addFun(toRefs(props), emit, { resetFields, validate }, { formItem, api });
 
     return {
-      title,
       unit,
       formItem,
       visibleModal,

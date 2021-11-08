@@ -19,7 +19,7 @@
           </a>
           <template #overlay>
             <a-menu>
-              <a-menu-item key="modify"><a @click="modify(record)">修改</a></a-menu-item>
+              <!-- <a-menu-item key="modify"><a @click="modify(record)">修改</a></a-menu-item> -->
               <a-menu-item key="delete"><a @click="deleteData(record)">删除</a></a-menu-item>
             </a-menu>
           </template>
@@ -49,7 +49,7 @@ export default defineComponent({
       title: '物料',
       loading: false,
       data: [],
-      rowKey: 'materialId',
+      rowKey: '',
       showModal: false,
       formData: {},
     });

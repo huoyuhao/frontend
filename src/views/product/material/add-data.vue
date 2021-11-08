@@ -1,7 +1,7 @@
 <template>
   <a-modal
     v-model:visible="visibleModal"
-    :title="title"
+    :title="isModify ? '修改' : '新增'"
     width="800px"
     cancelText="取消"
     okText="提交"
@@ -17,6 +17,7 @@
             show-search
             option-filter-prop="label"
             :options="dataType"
+            :disabled="isModify"
           />
         </a-form-item>
         <a-form-item v-else-if="item.dataIndex === 'materialUnitId'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
@@ -26,10 +27,11 @@
             show-search
             option-filter-prop="label"
             :options="dataUnit"
+            :disabled="isModify"
           />
         </a-form-item>
         <a-form-item v-else-if="!item.hideForm" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
-          <a-input v-model:value="formItem[item.dataIndex]" />
+          <a-input v-model:value="formItem[item.dataIndex]" :disabled="isModify && (item.disabled || false)" />
         </a-form-item>
       </template>
     </a-form>
@@ -67,7 +69,6 @@ export default defineComponent({
     const api = '/material';
     const formItem = reactive({});
     const ruleValidate = reactive({});
-    const title = props.isModify ? '修改' : '新增';
     list.forEach((item) => {
       const { title, dataIndex } = item;
       if (item.required) {
@@ -108,7 +109,6 @@ export default defineComponent({
     );
     queryType();
     return {
-      title,
       dataType,
       dataUnit,
       list,
