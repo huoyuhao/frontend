@@ -4,35 +4,70 @@ const product = {
   path: '/product',
   name: 'product',
   component: LAYOUTS,
-  redirect: '/product/warehouse/data',
+  redirect: '/product/warehouse',
   meta: {
     title: '物料管理',
     icon: 'AppstoreOutlined',
   },
   children: [
     {
-      path: 'warehouse/:type',
+      path: '/product/warehouse',
       name: 'product-warehouse',
-      meta: { title: '仓库', redirect: '/product/warehouse/data' },
-      component: () => {
-        return import('/@/views/product/warehouse/index.vue');
-      },
+      redirect: '/product/warehouse/data',
+      meta: { title: '仓库' },
+      component: { template: '<router-view />' },
+      children: [
+        {
+          path: '/product/warehouse/:type',
+          name: 'product-warehouse-type',
+          meta: { title: '仓库', hideMenu: true },
+          component: () => {
+            return import('/@/views/product/warehouse/index.vue');
+          },
+        },
+      ],
     },
     {
-      path: 'material/:type',
+      path: '/product/material/',
       name: 'product-material',
-      component: () => {
-        return import('/@/views/product/material/index.vue');
-      },
-      meta: { title: '物料', redirect: '/product/material/data' },
+      redirect: '/product/material/data',
+      meta: { title: '物料' },
+      component: { template: '<router-view />' },
+      children: [
+        {
+          path: '/product/material/:type',
+          name: 'product-material-type',
+          component: () => {
+            return import('/@/views/product/material/index.vue');
+          },
+          meta: { title: '物料', hideMenu: true },
+        },
+        {
+          path: '/product/material/detail',
+          name: 'product-material-detail',
+          component: () => {
+            return import('/@/views/product/material/detail.vue');
+          },
+          meta: { title: '物料', hideMenu: true },
+        },
+      ],
     },
     {
-      path: 'materialParts/:type',
-      name: 'product-materialParts',
-      component: () => {
-        return import('/@/views/product/materialParts/index.vue');
-      },
-      meta: { title: '库存管理', redirect: '/product/materialParts/list' },
+      path: '/product/stock',
+      name: 'product-stock',
+      redirect: '/product/stock/list',
+      meta: { title: '仓库' },
+      component: { template: '<router-view />' },
+      children: [
+        {
+          path: '/product/stock/:type',
+          name: 'product-stock-type',
+          meta: { title: '库存', hideMenu: true },
+          component: () => {
+            return import('/@/views/product/stock/index.vue');
+          },
+        },
+      ],
     },
   ],
 };

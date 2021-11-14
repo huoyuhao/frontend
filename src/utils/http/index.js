@@ -22,6 +22,7 @@ export class HttpServer {
           removeToken();
           const msg = '未登录，请重新登陆';
           message.error(msg);
+          location.href = '/#/login';
         } else {
           const msg = res?.msg || '系统繁忙，请稍后重试';
           message.error(msg);

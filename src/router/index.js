@@ -56,7 +56,6 @@ router.beforeEach((_to, _from, next) => {
   clearPending();
   const { ignoreAuth } = _to.meta;
   if (ignoreAuth || getToken()) {  // 页面无需校验权限 或者有token)
-    console.log(_to);
     next();
   } else {
     next('/login');

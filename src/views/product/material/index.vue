@@ -18,7 +18,6 @@ export default defineComponent({
     const active = ref('');
     watchEffect(() => {
       active.value = route.params?.type;
-      console.log(active.value);
     });
     return {
       list,
