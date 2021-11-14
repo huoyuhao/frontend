@@ -3,11 +3,11 @@
     <d-tab-list :data="list" :activeKey="current && current.key" @change="change" />
     <template v-if="keepAlive">
       <keep-alive>
-        <component :is="component" :data="data"></component>
+        <component :is="component"></component>
       </keep-alive>
     </template>
     <template v-else>
-        <component :is="component" :data="data"></component>
+        <component :is="component"></component>
     </template>
   </template>
 </template>
@@ -33,9 +33,6 @@ export default defineComponent({
     keepAlive: {
       type: Boolean,
       default: true,
-    },
-    data: {
-      type: Object,
     },
   },
   setup(props) {

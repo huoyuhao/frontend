@@ -13,7 +13,7 @@
             placeholder="请选择"
             show-search
             option-filter-prop="label"
-            :options="data && data.materialArr"
+            :options="materialArr"
           />
       </a-form-item>
       <a-form-item label="RF标签码" name="tagStr">
@@ -32,15 +32,12 @@
   </d-card>
 </template>
 <script>
-import { computed, defineComponent, reactive, toRefs } from 'vue';
+import { computed, defineComponent, reactive, toRefs, ref } from 'vue';
 import { product } from '/@/api/product/index';
 import { message, Form } from 'ant-design-vue';
 export default defineComponent({
   name: 'DProductEntryFactory',
   components: { },
-  props: {
-    data: Object,
-  },
   setup() {
     const state = reactive({
       title: '入厂',
@@ -72,9 +69,20 @@ export default defineComponent({
       })
         .catch();
     };
+    const materialArr = ref([]);
+    const query = () => {
+      product({ api: '/material', method: 'get' }).then((res) => {
+        materialArr.value = res.map((item) => {
+          return { value: item.materialId, label: item.materialName };
+        });
+      })
+        .catch();
+    };
+    query();
     return {
       ...toRefs(state),
       formItem,
+      materialArr,
       submit,
     };
   },

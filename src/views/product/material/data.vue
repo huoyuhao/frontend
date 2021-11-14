@@ -11,8 +11,14 @@
         <a-button type="primary" @click="query">刷新</a-button>
         <a-button type="primary" @click="add">新增</a-button>
       </template>
-      <template #materialCode="{ record, text }">
+      <template #materialName="{ record, text }">
         <a @click="routeLink(record)">{{ text }}</a>
+      </template>
+      <template #materialType="{ text }">
+        <p>{{ text && text.materialTypeName }}</p>
+      </template>
+      <template #materialUnit="{ text }">
+        <p>{{ text && text.materialUnitName }}</p>
       </template>
       <template #action="{ record }">
         <a-dropdown placement="bottomCenter">
@@ -104,7 +110,6 @@ export default defineComponent({
       state.formData = item;
     };
     const routeLink = (record) => {
-      console.log(record);
       const { materialId } = record;
       router.push({
         path: '/product/material/detail',

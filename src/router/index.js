@@ -14,6 +14,7 @@ import { clearPending } from '/@/utils/http/pending';
 //   routeModuleList.push(...modList);
 // });
 import product from './modules/product';
+import produce from './modules/produce';
 import setting from './modules/setting';
 export const RootRoute = {
   path: '/',
@@ -40,7 +41,7 @@ export const ErrorRoute = {
   meta: { title: '找不到', hideMenu: true, ignoreAuth: true },
 };
 
-export const basicRoutes = [LoginRoute, RootRoute, ErrorRoute, product, setting];
+export const basicRoutes = [LoginRoute, RootRoute, ErrorRoute, product, produce, setting];
 
 export const router = createRouter({
   history: createWebHashHistory(import.meta.env.VITE_PUBLIC_PATH),

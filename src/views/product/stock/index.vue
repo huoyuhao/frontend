@@ -1,10 +1,9 @@
 <template>
-  <d-tab-view :list="list" :active="active" :data="{ materialArr }"></d-tab-view>
+  <d-tab-view :list="list" :active="active"></d-tab-view>
 </template>
 <script>
 import { defineComponent, watchEffect, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { product } from '/@/api/product/index';
 export default defineComponent({
   name: 'DProductWarehouse',
   components: {
@@ -23,20 +22,9 @@ export default defineComponent({
     watchEffect(() => {
       active.value = route.params?.type;
     });
-    const materialArr = ref([]);
-    const query = async () => {
-      product({ api: '/material', method: 'get' }).then((res) => {
-        materialArr.value = res.map((item) => {
-          return { value: item.materialId, label: item.materialName };
-        });
-      })
-        .catch();
-    };
-    query();
     return {
       list,
       active,
-      materialArr,
     };
   },
 });

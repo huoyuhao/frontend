@@ -23,18 +23,14 @@
 <script>
 import { computed, defineComponent, reactive, toRefs } from 'vue';
 import { product } from '/@/api/product/index';
-import { message } from 'ant-design-vue';
+import { message, Form } from 'ant-design-vue';
 
 export default defineComponent({
   name: 'DProductEntryFactory',
   components: { },
-  props: {
-    data: Object,
-  },
   setup() {
     const state = reactive({
       title: '出库',
-      materialArr: [],
       tagStr: '',
     });
     const api = '/material/entity';
@@ -45,6 +41,8 @@ export default defineComponent({
       materialEntityPositionType: 1,
       materialEntityPosition: null,
     });
+    const { useForm } = Form;
+    const { resetFields } = useForm(formItem);
     formItem.rfTagCodeList = computed(() => {
       return state.tagStr.trim().split(/[\n\s+,，；;]/g).filter((item) => {
         return item;
@@ -54,6 +52,8 @@ export default defineComponent({
       state.loading = true;
       product({ api, method: 'put', data: formItem }).then(() => {
         message.success(`${state.title}成功`);
+        resetFields();
+        state.tagStr = '';
       })
         .catch();
     };

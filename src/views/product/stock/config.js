@@ -14,19 +14,21 @@ export const unit = [
 ];
 
 export const bom = [
-  { title: '唯一标识', dataIndex: 'bomId', rowKey: true, hideForm: true },
+  { title: '唯一标识', dataIndex: 'bomId', rowKey: true, hideTable: true, hideForm: true },
   { title: 'BOM代码', dataIndex: 'bomCode', required: true },
   { title: 'BOM名称', dataIndex: 'bomName', required: true },
   { title: '助记码', dataIndex: 'bomMnemonic', required: true },
-  { title: '目标物料代码', dataIndex: 'targetMaterialId' },
-  { title: '目标物料名称', dataIndex: 'targetMaterialCode', required: true },
-  { title: '目标物料数量', dataIndex: 'targetMaterialName', required: true },
-  { title: '助记码', dataIndex: 'targetMaterialNum', required: true },
+  { title: '目标物料ID', dataIndex: 'targetMaterialId', hideTable: true, required: true },
+  { title: '目标物料代码', dataIndex: 'targetMaterialCode', hideTable: true, hideForm: true },
+  { title: '目标物料名称', dataIndex: 'targetMaterialName', hideForm: true },
+  { title: '目标物料数量', dataIndex: 'targetMaterialNum', required: true },
+  { title: '原材料列表', dataIndex: 'rawMaterialList', hideTable: true, required: true },
+  { title: '备注', dataIndex: 'description' },
 ];
 
 export const bomMaterial = [
-  { title: '原材料ID', dataIndex: 'rawMaterialId', rowKey: true, hideForm: true },
-  { title: '原材料代码', dataIndex: 'rawMaterialCode', required: true },
-  { title: '原材料名称', dataIndex: 'rawMaterialName', required: true },
-  { title: '原材料数量', dataIndex: 'rawMaterialNum', required: true },
+  { title: '原材料ID', dataIndex: 'rawMaterialId', rowKey: true },
+  { title: '原材料代码', dataIndex: 'rawMaterialCode' },
+  { title: '原材料名称', dataIndex: 'rawMaterialName' },
+  { title: '原材料数量', dataIndex: 'rawMaterialNum' },
 ];
