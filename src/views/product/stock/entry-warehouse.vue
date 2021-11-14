@@ -26,7 +26,7 @@ import { message } from 'ant-design-vue';
 
 export default defineComponent({
   name: 'DProductEntryFactory',
-  components: {  },
+  components: { },
   props: {
     data: Object,
   },

@@ -151,12 +151,12 @@ export default defineComponent({
     transition: color 0.3s;
     &:hover {
       color: #1890ff;
-    }
-  }
+   }
+ }
   .d-content{
     margin: 16px 10px;
     min-height: calc(100vh - @height - 32px);
-  }
+ }
 }
 .d-header{
   height: @height;
@@ -168,11 +168,11 @@ export default defineComponent({
   justify-content: space-between;
   .d-breadcrumb{
     margin: 0 16px;
-  }
+ }
   .d-header-left {
     display: flex;
     align-items: center;
-  }
+ }
 }
 
 </style>

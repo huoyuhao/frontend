@@ -26,7 +26,7 @@ import { message } from 'ant-design-vue';
 
 export default defineComponent({
   name: 'DProductExhaust',
-  components: {  },
+  components: { },
   props: {
     data: Object,
   },

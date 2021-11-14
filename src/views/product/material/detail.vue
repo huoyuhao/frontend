@@ -38,17 +38,19 @@
 <script>
 import { defineComponent, reactive, toRefs } from 'vue';
 import { product } from '/@/api/product/index';
-import { list, trace } from './config';
+import { detail, trace } from './config';
+import { useRoute } from 'vue-router';
 
 export default defineComponent({
-  name: 'DProductMaterialData',
-  components: {  },
+  name: 'DProductMaterialDetial',
+  components: { },
   props: {
     data: Object,
   },
   setup() {
+    const route = useRoute();
     const state = reactive({
-      title: '物料件',
+      title: '物料详情',
       loading: false,
       loading1: false,
       data: [],
@@ -57,9 +59,10 @@ export default defineComponent({
       rowKey: 'materialEntityId',
       visibleModal: false,
     });
-    const api = '/material/entity';
+    const { materialId } = route.query;
+    const api = `/material/entity?materialId=${materialId}`;
     const columnsTrace = trace;
-    const columns = [...list, { title: '操作', dataIndex: 'action', align: 'center', width: '80px', slots: { customRender: 'action' } }];
+    const columns = [...detail, { title: '操作', dataIndex: 'action', align: 'center', width: '80px', slots: { customRender: 'action' } }];
 
     const query = () => {
       state.loading = true;

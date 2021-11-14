@@ -55,7 +55,7 @@ const product = {
     {
       path: '/product/stock',
       name: 'product-stock',
-      redirect: '/product/stock/list',
+      redirect: '/product/stock/bom',
       meta: { title: '仓库' },
       component: { template: '<router-view />' },
       children: [

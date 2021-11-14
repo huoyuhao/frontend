@@ -19,11 +19,11 @@
 <script>
 import { defineComponent, reactive, toRefs } from 'vue';
 import { product } from '/@/api/product/index';
-import { list } from './config';
+import { bom } from './config';
 
 export default defineComponent({
   name: 'DProductMaterialData',
-  components: {  },
+  components: { },
   props: {
     data: Object,
   },
@@ -36,7 +36,7 @@ export default defineComponent({
       rowKey: 'materialEntityId',
     });
     const api = '/bom';
-    const columns = [...list, { title: '操作', dataIndex: 'action', align: 'center', width: '80px', slots: { customRender: 'action' } }];
+    const columns = [...bom, { title: '操作', dataIndex: 'action', align: 'center', width: '80px', slots: { customRender: 'action' } }];
 
     const query = () => {
       state.loading = true;

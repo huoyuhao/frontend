@@ -74,15 +74,15 @@ export default defineComponent({
       line-height: 30px;
       padding: 0 8px;
       font-size: 12px;
-    }
+   }
     &:hover {
       color: @color;
-    }
+   }
     &.active {
       border: 0;
       color: #fff;
       background-color: @color;
-    }
-  }
+   }
+ }
 }
 </style>

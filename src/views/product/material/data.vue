@@ -11,6 +11,9 @@
         <a-button type="primary" @click="query">刷新</a-button>
         <a-button type="primary" @click="add">新增</a-button>
       </template>
+      <template #materialCode="{ record, text }">
+        <a @click="routeLink(record)">{{ text }}</a>
+      </template>
       <template #action="{ record }">
         <a-dropdown placement="bottomCenter">
           <a @click.prevent>
@@ -39,12 +42,14 @@ import { defineComponent, reactive, toRefs } from 'vue';
 import { product } from '/@/api/product/index';
 import { deleteFun } from '/@/utils/operate/index';
 import { list } from './config';
+import { useRouter } from 'vue-router';
 import DAdd from './add-data.vue';
 
 export default defineComponent({
   name: 'DProductMaterialData',
   components: { DAdd },
   setup() {
+    const router = useRouter();
     const state = reactive({
       title: '物料',
       loading: false,
@@ -98,10 +103,19 @@ export default defineComponent({
       state.showModal = true;
       state.formData = item;
     };
+    const routeLink = (record) => {
+      console.log(record);
+      const { materialId } = record;
+      router.push({
+        path: '/product/material/detail',
+        query: { materialId },
+      });
+    };
     query();
     return {
       ...toRefs(state),
       columns,
+      routeLink,
       query,
       update,
       add,

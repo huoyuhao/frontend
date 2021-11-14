@@ -16,7 +16,7 @@
                 :autoSize="{ minRows: 1, maxRows: 10 }"
                 :style="`position: absolute; margin-top:-16px; z-index: 99; border-radius: 4px 0px 0px 4px;${
                   isSearch.style ? isSearch.style : 'width: 500px'
-                }`"
+               }`"
               />
             </a-col>
             <a-col v-if="isSearch">
@@ -413,28 +413,28 @@ export default defineComponent({
 
   ::v-deep(button) {
     margin-right: 10px;
-  }
+ }
 
   .d-table-search {
     min-width: 520px;
     width: 30%;
     min-width: 400px;
-  }
+ }
 }
 
 .d-table-content {
   // table字体大小重置
   & ::v-deep(table) {
     font-size: 12px;
-  }
+ }
 
   // 排序icon位置、大小重置
   & ::v-deep(.ant-table-column-sorter-inner) {
     font-size: 14px;
-  }
+ }
 
   & ::v-deep(.ant-table-column-sorter svg) {
     font-size: 10px;
-  }
+ }
 }
 </style>

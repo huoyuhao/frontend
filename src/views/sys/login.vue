@@ -79,13 +79,13 @@ export default defineComponent({
     color: #222;
     font-size: 20px;
     font-weight: 900;
-  }
+ }
   .d-button{
     background: #40A9FF;
     color: #FFF;
     &:hover{
       border: none;
-    }
-  }
+   }
+ }
 }
 </style>

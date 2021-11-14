@@ -59,10 +59,10 @@ export default defineComponent({
   &:hover {
     border-color: rgba(0, 0, 0, 0.09);
     box-shadow: 0 2px 8px rgb(0 0 0 / 9%);
-  }
+ }
   .d-card-header {
     padding: 0 0 12px 4px;
-  }
+ }
   .d-card-title {
     font-size: 14px;
     padding: 0 10px 0 10px;
@@ -70,15 +70,15 @@ export default defineComponent({
     border-left: 3px solid @color;
     line-height: 16px;
     cursor: pointer;
-  }
+ }
   .d-card-content {
     padding-bottom: 16px;
-  }
+ }
   .d-loading {
     height: 420px;
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+ }
 }
 </style>
