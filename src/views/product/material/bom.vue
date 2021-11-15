@@ -20,7 +20,7 @@
         </d-table>
       </template>
       <template #action="{ record }">
-        <a-menu-item key="delete"><a @click="deleteData(record)">删除</a></a-menu-item>
+        <a-button type="primary" size="small" @click="deleteData(record)">删除</a-button>
       </template>
     </d-table>
   </d-card>
@@ -67,11 +67,14 @@ export default defineComponent({
     state.bomMaterial = bomMaterial;
     const query = () => {
       state.loading = true;
-      product({ api, method: 'get' }).then((res) => {
-        state.loading = false;
-        state.data = res;
-      })
-        .catch();
+      // product({ api, method: 'get' }).then((res) => {
+      state.loading = false;
+      state.data = [
+        { bomId: 1, bomCode: '001', rawMaterialList: [{ rawMaterialId: 2 }, { rawMaterialId: 3 }] },
+        { bomId: 4,  bomCode: '002', rawMaterialList: [{ rawMaterialId: 5 }, { rawMaterialId: 6 }] },
+      ];
+      // })
+      //   .catch();
     };
     const update = () => {
       query();

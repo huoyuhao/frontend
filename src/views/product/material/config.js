@@ -27,21 +27,22 @@ export const list = [
   { title: '备注', dataIndex: 'description' },
 ];
 
-export const detail = [
-  { title: '唯一标识', dataIndex: 'materialEntityId', rowKey: true },
-  { title: '物料名称', dataIndex: 'materialName', filter: true },
-  { title: '物料类型ID', dataIndex: 'materialTypeId', filter: true },
-  { title: '元素数量', dataIndex: 'materialEntityElementNumber' },
-  { title: 'RF标签码', dataIndex: 'rfTagCode' },
-  { title: '物料状态', dataIndex: 'materialEntityStatus', filter: true },
-  { title: '物料位置', dataIndex: 'materialEntityPosition', sort: 'string', filter: true },
+export const bom = [
+  { title: '唯一标识', dataIndex: 'bomId', rowKey: true, hideTable: true, hideForm: true },
+  { title: 'BOM代码', dataIndex: 'bomCode', required: true },
+  { title: 'BOM名称', dataIndex: 'bomName', required: true },
+  { title: '助记码', dataIndex: 'bomMnemonic', required: true },
+  { title: '目标物料ID', dataIndex: 'targetMaterialId', hideTable: true, required: true },
+  { title: '目标物料代码', dataIndex: 'targetMaterialCode', hideTable: true, hideForm: true },
+  { title: '目标物料名称', dataIndex: 'targetMaterialName', hideForm: true },
+  { title: '目标物料数量', dataIndex: 'targetMaterialNum' },
+  { title: '物料列表', dataIndex: 'rawMaterialList', hideTable: true, required: true },
+  { title: '备注', dataIndex: 'description' },
 ];
 
-export const trace = [
-  { title: '唯一标识', dataIndex: 'materialEntityTraceId', rowKey: true },
-  { title: 'RF标签码', dataIndex: 'currentRFTagCode' },
-  { title: '物料ID', dataIndex: 'materialEntityId' },
-  { title: '物料件追踪的相关操作', dataIndex: 'operation' },
-  { title: '仓库ID', dataIndex: 'warehouseId' },
-  { title: '流水线ID', dataIndex: 'assemblyLineId' },
+export const bomMaterial = [
+  { title: '物料ID', dataIndex: 'rawMaterialId', rowKey: true },
+  { title: '物料代码', dataIndex: 'rawMaterialCode' },
+  { title: '物料名称', dataIndex: 'rawMaterialName' },
+  { title: '物料数量', dataIndex: 'rawMaterialNum' },
 ];

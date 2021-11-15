@@ -29,7 +29,7 @@ export default defineComponent({
   components: { },
   setup() {
     const state = reactive({
-      title: '用尽',
+      title: '标签初始化',
       tagStr: '',
     });
     const api = '/material/entity';

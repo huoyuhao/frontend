@@ -11,12 +11,11 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const list = [
-      { key: 'bom', name: 'BOM', route: '/product/stock/bom', file: import('./bom.vue') },
       { key: 'entryFactory', name: '入厂', route: '/product/stock/entryFactory', file: import('./entry-factory.vue') },
       { key: 'outFactory', name: '出厂', route: '/product/stock/outFactory', file: import('./out-factory.vue') },
-      { key: 'entryWarehouse', name: '入库', route: '/product/stock/entryWarehouse', file: import('./entry-warehouse.vue') },
+      { key: 'entryWarehouse', name: '生产入库', route: '/product/stock/entryWarehouse', file: import('./entry-warehouse.vue') },
       { key: 'outWarehouse', name: '出库', route: '/product/stock/outWarehouse', file: import('./out-warehouse.vue') },
-      { key: 'exhaust', name: '用尽', route: '/product/stock/exhaust', file: import('./exhaust.vue') },
+      { key: 'exhaust', name: '标签初始化', route: '/product/stock/exhaust', file: import('./exhaust.vue') },
     ];
     const active = ref('');
     watchEffect(() => {

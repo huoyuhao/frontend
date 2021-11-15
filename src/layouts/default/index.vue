@@ -100,7 +100,9 @@ export default defineComponent({
       routeList.forEach((routeItem) => {
         const { meta } = routeItem;
         const name = String(routeItem.name);
-        breadcrumb.push({ name, title: meta.title });
+        if (meta.title) {
+          breadcrumb.push({ name, title: meta.title });
+        }
         openKeys.push(String(name));
         if (!isMatchRoute) {
           if (meta.hideMenu) {

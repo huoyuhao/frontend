@@ -11,7 +11,7 @@
         <a-button type="primary" @click="query">刷新</a-button>
       </template>
       <template #action="{ record }">
-        <a-button type="primary" size="mini" @click="queryTrace(record)">物料轨迹</a-button>
+        <a-button type="primary" size="small" @click="queryTrace(record)">物料轨迹</a-button>
       </template>
     </d-table>
   </d-card>
@@ -44,9 +44,6 @@ import { useRoute } from 'vue-router';
 export default defineComponent({
   name: 'DProductMaterialDetial',
   components: { },
-  props: {
-    data: Object,
-  },
   setup() {
     const route = useRoute();
     const state = reactive({

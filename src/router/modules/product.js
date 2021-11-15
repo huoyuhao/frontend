@@ -20,7 +20,7 @@ const product = {
         {
           path: '/product/warehouse/:type',
           name: 'product-warehouse-type',
-          meta: { title: '仓库', hideMenu: true },
+          meta: { hideMenu: true },
           component: () => {
             return import('/@/views/product/warehouse/index.vue');
           },
@@ -40,29 +40,38 @@ const product = {
           component: () => {
             return import('/@/views/product/material/index.vue');
           },
-          meta: { title: '物料', hideMenu: true },
+          meta: { hideMenu: true },
         },
         {
           path: '/product/material/detail',
           name: 'product-material-detail',
-          component: () => {
-            return import('/@/views/product/material/detail.vue');
-          },
-          meta: { title: '物料', hideMenu: true },
+          redirect: '/product/material/detail/list',
+          meta: { hideMenu: true },
+          component: { template: '<router-view />' },
+          children: [
+            {
+              path: '/product/material/detail/:type',
+              name: 'product-material-detail-type',
+              component: () => {
+                return import('/@/views/product/material/detail/index.vue');
+              },
+              meta: { title: '物料详情', hideMenu: true },
+            },
+          ],
         },
       ],
     },
     {
       path: '/product/stock',
       name: 'product-stock',
-      redirect: '/product/stock/bom',
+      redirect: '/product/stock/entryFactory',
       meta: { title: '库存' },
       component: { template: '<router-view />' },
       children: [
         {
           path: '/product/stock/:type',
           name: 'product-stock-type',
-          meta: { title: '库存', hideMenu: true },
+          meta: { hideMenu: true },
           component: () => {
             return import('/@/views/product/stock/index.vue');
           },

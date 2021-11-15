@@ -12,18 +12,7 @@
         <a-button type="primary" @click="add">新增</a-button>
       </template>
       <template #action="{ record }">
-        <a-dropdown placement="bottomCenter">
-          <a @click.prevent>
-            操作
-            <DownOutlined />
-          </a>
-          <template #overlay>
-            <a-menu>
-              <!-- <a-menu-item key="modify"><a @click="modify(record)">修改</a></a-menu-item> -->
-              <a-menu-item key="delete"><a @click="deleteData(record)">删除</a></a-menu-item>
-            </a-menu>
-          </template>
-        </a-dropdown>
+        <a-button type="primary" size="small" @click="deleteData(record)">删除</a-button>
       </template>
     </d-table>
   </d-card>

@@ -29,7 +29,7 @@ export default defineComponent({
   components: { },
   setup() {
     const state = reactive({
-      title: '入库',
+      title: '生产入库',
       tagStr: '',
     });
     const api = '/material/entity';
