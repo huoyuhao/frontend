@@ -53,8 +53,9 @@ export default defineComponent({
       materialEntityPosition: null,
       materialEntityElementNumber: null,
     });
+    const ruleValidate = reactive({});
     const { useForm } = Form;
-    const { resetFields } = useForm(formItem);
+    const { resetFields } = useForm(formItem, ruleValidate);
     formItem.rfTagCodeList = computed(() => {
       return state.tagStr.trim().split(/[\n\s+,，；;]/g).filter((item) => {
         return item;
