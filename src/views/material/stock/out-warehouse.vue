@@ -26,7 +26,7 @@ import { product } from '/@/api/product/index';
 import { message, Form } from 'ant-design-vue';
 
 export default defineComponent({
-  name: 'DProductEntryFactory',
+  name: 'DMaterialEntryFactory',
   components: { },
   setup() {
     const state = reactive({

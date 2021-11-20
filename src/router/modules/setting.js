@@ -14,7 +14,7 @@ const setting = {
       path: 'role',
       name: 'setting-role',
       component: () => {
-        return import('/@/views/product/warehouse/index.vue');
+        return import('/@/views/material/warehouse/index.vue');
       },
       meta: { title: '角色管理', hideMenu: true },
     },
@@ -22,7 +22,7 @@ const setting = {
       path: 'account',
       name: 'setting-account',
       component: () => {
-        return import('/@/views/product/warehouse/index.vue');
+        return import('/@/views/material/warehouse/index.vue');
       },
       meta: { title: '账号管理' },
     },

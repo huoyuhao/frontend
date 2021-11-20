@@ -25,19 +25,19 @@ import { product } from '/@/api/product/index';
 import { message, Form } from 'ant-design-vue';
 
 export default defineComponent({
-  name: 'DProductEntryFactory',
+  name: 'DMaterialExhaust',
   components: { },
   setup() {
     const state = reactive({
-      title: '生产入库',
+      title: '标签初始化',
       tagStr: '',
     });
     const api = '/material/entity';
 
     const formItem = reactive({
       rfTagCodeList: [],
-      materialEntityAction: 2,
-      materialEntityPositionType: 1,
+      materialEntityAction: 4,
+      materialEntityPositionType: 4,
       materialEntityPosition: null,
     });
     const { useForm } = Form;

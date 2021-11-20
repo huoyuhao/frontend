@@ -27,25 +27,25 @@
 import { defineComponent, reactive, toRefs } from 'vue';
 import { product } from '/@/api/product/index';
 import { deleteFun } from '/@/utils/operate/index';
-import { unit } from './config';
-import DAdd from './add-unit.vue';
+import { type } from './config';
+import DAdd from './add-type.vue';
 
 export default defineComponent({
-  name: 'DProductMaterialUnit',
+  name: 'DMaterialWarehouseType',
   components: { DAdd },
   setup() {
     const state = reactive({
-      title: '物料单位',
+      title: '仓库类型',
       loading: false,
       data: [],
-      rowKey: 'materialUnitId',
+      rowKey: 'warehouseTypeId',
       showModal: false,
-      formData: null,
+      formData: {},
     });
-    const api = '/material/unit';
+    const api = '/warehouse/type';
 
     const columns = [];
-    unit.forEach((item) => {
+    type.forEach((item) => {
       const { dataIndex, rowKey, hideTable } = item;
       if (rowKey) {
         state.rowKey = dataIndex;

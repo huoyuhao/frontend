@@ -11,15 +11,6 @@
         <a-button type="primary" @click="query">刷新</a-button>
         <a-button type="primary" @click="add">新增</a-button>
       </template>
-      <template #materialName="{ record, text }">
-        <a @click="routeLink(record)">{{ text }}</a>
-      </template>
-      <template #materialType="{ text }">
-        <p>{{ text && text.materialTypeName }}</p>
-      </template>
-      <template #materialUnit="{ text }">
-        <p>{{ text && text.materialUnitName }}</p>
-      </template>
       <template #action="{ record }">
         <a-button type="primary" size="small" @click="deleteData(record)">删除</a-button>
       </template>
@@ -28,7 +19,7 @@
   <d-add
     v-model:visible="showModal"
     :form-data="formData"
-    :is-modify="Boolean(formData[rowKey])"
+    :is-modify="Boolean(formData && formData[rowKey])"
     @update="update"
   />
 </template>
@@ -37,23 +28,21 @@ import { defineComponent, reactive, toRefs } from 'vue';
 import { product } from '/@/api/product/index';
 import { deleteFun } from '/@/utils/operate/index';
 import { list } from './config';
-import { useRouter } from 'vue-router';
 import DAdd from './add-data.vue';
 
 export default defineComponent({
-  name: 'DProductMaterialData',
+  name: 'DMaterialWarehouseData',
   components: { DAdd },
   setup() {
-    const router = useRouter();
     const state = reactive({
-      title: '物料',
+      title: '仓库',
       loading: false,
       data: [],
-      rowKey: '',
+      rowKey: 'warehouseId',
       showModal: false,
-      formData: {},
+      formData: null,
     });
-    const api = '/material';
+    const api = '/warehouse';
 
     const columns = [];
     list.forEach((item) => {
@@ -98,18 +87,10 @@ export default defineComponent({
       state.showModal = true;
       state.formData = item;
     };
-    const routeLink = (record) => {
-      const { materialId } = record;
-      router.push({
-        path: '/product/material/detail',
-        query: { materialId },
-      });
-    };
     query();
     return {
       ...toRefs(state),
       columns,
-      routeLink,
       query,
       update,
       add,

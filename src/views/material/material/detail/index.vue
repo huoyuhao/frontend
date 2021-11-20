@@ -1,18 +1,18 @@
 <template>
   <d-tab-view :list="list" :active="active"></d-tab-view>
 </template>
-<script lang="ts">
+<script>
 import { defineComponent, watchEffect, ref } from 'vue';
 import { useRoute } from 'vue-router';
 export default defineComponent({
-  name: 'DProductWarehouse',
+  name: 'DMaterialMaterialDetailIndex',
   components: {
   },
   setup() {
     const route = useRoute();
     const list = [
-      { key: 'data', name: '仓库', route: '/product/warehouse/data', file: import('./data.vue') },
-      { key: 'type', name: '仓库类型', route: '/product/warehouse/type', file: import('./type.vue') },
+      { key: 'list', name: '物料详情', route: '/material/material/detail/list', file: import('./list.vue') },
+      { key: 'trace', name: '物料轨迹', route: '/material/material/detail/trace', file: import('./trace.vue') },
     ];
     const active = ref('');
     watchEffect(() => {

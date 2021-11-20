@@ -13,7 +13,7 @@ import { clearPending } from '/@/utils/http/pending';
 //   const modList = Array.isArray(mod) ? [...mod] : [mod];
 //   routeModuleList.push(...modList);
 // });
-import product from './modules/product';
+import material from './modules/material';
 import produce from './modules/produce';
 import setting from './modules/setting';
 export const RootRoute = {
@@ -41,7 +41,7 @@ export const ErrorRoute = {
   meta: { title: '找不到', hideMenu: true, ignoreAuth: true },
 };
 
-export const basicRoutes = [LoginRoute, RootRoute, ErrorRoute, product, produce, setting];
+export const basicRoutes = [LoginRoute, RootRoute, ErrorRoute, material, produce, setting];
 
 export const router = createRouter({
   history: createWebHashHistory(import.meta.env.VITE_PUBLIC_PATH),

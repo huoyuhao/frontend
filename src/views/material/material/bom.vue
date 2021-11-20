@@ -40,7 +40,7 @@ import { deleteFun } from '/@/utils/operate/index';
 import DAdd from './add-bom.vue';
 
 export default defineComponent({
-  name: 'DProductMaterialBom',
+  name: 'DMaterialBom',
   components: { DAdd },
   setup() {
     const state = reactive({

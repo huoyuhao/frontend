@@ -20,7 +20,7 @@ import { trace } from './config';
 import { useRoute } from 'vue-router';
 
 export default defineComponent({
-  name: 'DProductMaterialDetialTrace',
+  name: 'DMaterialMaterialDetialTrace',
   components: { },
   setup() {
     const route = useRoute();
