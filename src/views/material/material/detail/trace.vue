@@ -31,7 +31,7 @@ export default defineComponent({
       rowKey: 'materialEntityTraceId',
     });
     const { materialId } = route.query;
-    const api = `material/entity/trace?materialId=${materialId}`;
+    const api = `material/storeRecords?materialId=${materialId}`;
     const columns = [...trace];
 
     const query = () => {

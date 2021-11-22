@@ -12,7 +12,7 @@ export default defineComponent({
     const route = useRoute();
     const list = [
       { key: 'list', name: '物料详情', route: '/material/material/detail/list', file: import('./list.vue') },
-      { key: 'trace', name: '物料轨迹', route: '/material/material/detail/trace', file: import('./trace.vue') },
+      { key: 'trace', name: '出入库记录', route: '/material/material/detail/trace', file: import('./trace.vue') },
     ];
     const active = ref('');
     watchEffect(() => {
