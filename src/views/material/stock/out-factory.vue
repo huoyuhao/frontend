@@ -13,15 +13,32 @@
       <a-form-item label="物料位置" name="materialEntityPosition">
         <a-input-number v-model:value="formItem.materialEntityPosition" placeholder="输入输入物料位置" />
       </a-form-item>
+        <a-form-item label="仓库管理员">
+          <a-select
+            v-model:value="formItem.warehouseKeeperId"
+            placeholder="请选择"
+            show-search
+            option-filter-prop="label"
+            :options="userArr"
+          />
+        </a-form-item>
+        <a-form-item label="经办人">
+          <a-select
+            v-model:value="formItem.ownerId"
+            placeholder="请选择"
+            show-search
+            option-filter-prop="label"
+            :options="userArr"
+          />
+        </a-form-item>
       <a-form-item :wrapper-col="{ span: 12, offset: 4 }">
         <a-button class="d-button" type="primary" @click="submit">提交</a-button>
       </a-form-item>
     </a-form>
-
   </d-card>
 </template>
 <script>
-import { computed, defineComponent, reactive, toRefs } from 'vue';
+import { computed, defineComponent, reactive, toRefs, ref } from 'vue';
 import { product } from '/@/api/product/index';
 import { message, Form } from 'ant-design-vue';
 
@@ -40,6 +57,8 @@ export default defineComponent({
       materialEntityAction: 3,
       materialEntityPositionType: 3,
       materialEntityPosition: null,
+      warehouseKeeperId: '',
+      ownerId: '',
     });
     const ruleValidate = reactive({});
     const { useForm } = Form;
@@ -58,10 +77,22 @@ export default defineComponent({
       })
         .catch();
     };
+
+    const userArr = ref([]);
+    const queryUser = () => {
+      product({ api: '/user' }).then((res) => {
+        userArr.value = res.map((item) => {
+          return { value: item.userId, label: `${item.userCode} - ${item.userName}` };
+        });
+      })
+        .catch();
+    };
+    queryUser();
     return {
       ...toRefs(state),
       formItem,
       submit,
+      userArr,
     };
   },
 });

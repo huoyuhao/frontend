@@ -12,7 +12,7 @@
               </template>
               <template #title>{{ subItem.meta.title }}</template>
               <template v-for="menuItem in subItem.children">
-                <template v-if="!menuItem.meta.hideMenu">
+                <template v-if="menuItem.meta || !menuItem.meta.hideMenu">
                   <a-menu-item :key="menuItem.name">{{ menuItem.meta.title }}</a-menu-item>
                 </template>
               </template>

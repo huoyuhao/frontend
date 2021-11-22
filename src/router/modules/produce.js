@@ -7,20 +7,20 @@ const produce = {
   redirect: '/produce/task',
   meta: {
     title: '生产管理',
-    icon: 'AimOutlined',
+    icon: 'OrderedListOutlined',
   },
   children: [
     {
       path: '/produce/task',
       name: 'produce-task',
-      redirect: '/produce/task/list',
-      meta: { title: '工序' },
+      redirect: '/produce/task/data',
+      meta: { title: '标准工序' },
       component: { template: '<router-view />' },
       children: [
         {
           path: '/produce/task/:type',
           name: 'produce-task-type',
-          meta: { title: '工序', hideMenu: true },
+          meta: { hideMenu: true },
           component: () => {
             return import('/@/views/produce/task/index.vue');
           },
@@ -30,8 +30,8 @@ const produce = {
     {
       path: '/produce/plan',
       name: 'produce-plan',
-      redirect: '/produce/plan/list',
-      meta: { title: '计划' },
+      redirect: '/produce/plan/data',
+      meta: { title: '生产计划' },
       component: { template: '<router-view />' },
       children: [
         {

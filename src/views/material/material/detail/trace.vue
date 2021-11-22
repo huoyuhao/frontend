@@ -25,7 +25,7 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const state = reactive({
-      title: '物料轨迹',
+      title: '出入库记录',
       loading: false,
       data: [],
       rowKey: 'materialEntityTraceId',

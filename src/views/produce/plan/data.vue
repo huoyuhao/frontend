@@ -11,13 +11,11 @@
         <a-button type="primary" @click="query">刷新</a-button>
         <a-button type="primary" @click="add">新增</a-button>
       </template>
-      <template #expandedRowRender="{ record }">
-        <d-table
-          :columns="bomMaterial"
-          :data-source="record.rawMaterialList"
-          :rowKey="'rawMaterialId'"
-        >
-        </d-table>
+      <template #targetMaterialId="{ text }">
+        <p>{{ materialObj[text] }}</p>
+      </template>
+      <template #bomId="{ text }">
+        <p>{{ bomObj[text] }}</p>
       </template>
       <template #action="{ record }">
         <a-button type="primary" size="small" @click="deleteData(record)">删除</a-button>
@@ -27,34 +25,39 @@
   <d-add
     v-model:visible="showModal"
     :form-data="formData"
-    :is-modify="Boolean(formData[rowKey])"
-    :materialArr="data && data.materialArr"
+    :is-modify="Boolean(formData && formData[rowKey])"
+    :bomArr="bomArr"
+    :materialArr="materialArr"
     @update="update"
   />
 </template>
 <script>
 import { defineComponent, reactive, toRefs } from 'vue';
 import { product } from '/@/api/product/index';
-import { bom, bomMaterial } from './config';
 import { deleteFun } from '/@/utils/operate/index';
-import DAdd from './add-bom.vue';
+import { list } from './config';
+import DAdd from './add-data.vue';
 
 export default defineComponent({
-  name: 'DMaterialBom',
+  name: 'DProduceTaskData',
   components: { DAdd },
   setup() {
     const state = reactive({
-      title: 'BOM',
+      title: '生产工序',
       loading: false,
       data: [],
       rowKey: '',
-      bomMaterial: [],
       showModal: false,
-      formData: {},
+      formData: null,
+      bomArr: [],
+      bomObj: {},
+      materialArr: [],
+      materialObj: {},
     });
-    const api = '/bom';
+    const api = '/StandardProcess';
+
     const columns = [];
-    bom.forEach((item) => {
+    list.forEach((item) => {
       const { dataIndex, rowKey, hideTable } = item;
       if (rowKey) {
         state.rowKey = dataIndex;
@@ -64,12 +67,32 @@ export default defineComponent({
       }
     });
     columns.push({ title: '操作', dataIndex: 'action', align: 'center', width: '80px', slots: { customRender: 'action' } });
-    state.bomMaterial = bomMaterial;
+
     const query = () => {
       state.loading = true;
       product({ api, method: 'get' }).then((res) => {
         state.loading = false;
         state.data = res;
+      })
+        .catch();
+      // 获取物料数据
+      product({ api: '/material', method: 'get' }).then((res) => {
+        state.materialArr = [];
+        state.materialObj = {};
+        res.forEach((item) => {
+          state.materialArr.push({ value: item.materialId, label: item.materialName });
+          state.materialObj[item.materialId] = item.materialName;
+        });
+      })
+        .catch();
+      // 获取bom数据
+      product({ api: '/bom', method: 'get' }).then((res) => {
+        res.forEach((item) => {
+          state.bomObj = [];
+          state.materialObj = {};
+          state.bomObj.push({ value: item.bomId, label: item.bomName });
+          state.bomObj[item.bomId] = item.bomName;
+        });
       })
         .catch();
     };
@@ -92,6 +115,10 @@ export default defineComponent({
         update();
       });
     };
+    const modify = (item) => {
+      state.showModal = true;
+      state.formData = item;
+    };
     query();
     return {
       ...toRefs(state),
@@ -100,6 +127,7 @@ export default defineComponent({
       update,
       add,
       deleteData,
+      modify,
     };
   },
 });

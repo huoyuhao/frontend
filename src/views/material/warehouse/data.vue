@@ -38,7 +38,7 @@ export default defineComponent({
       title: '仓库',
       loading: false,
       data: [],
-      rowKey: 'warehouseId',
+      rowKey: '',
       showModal: false,
       formData: null,
     });

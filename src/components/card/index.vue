@@ -19,7 +19,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent, ref } from 'vue';
 import { ArrowsAltOutlined, ShrinkOutlined } from '@ant-design/icons-vue';
 export default defineComponent({

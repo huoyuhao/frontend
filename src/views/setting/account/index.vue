@@ -11,14 +11,6 @@
         <a-button type="primary" @click="query">刷新</a-button>
         <a-button type="primary" @click="add">新增</a-button>
       </template>
-      <template #expandedRowRender="{ record }">
-        <d-table
-          :columns="bomMaterial"
-          :data-source="record.rawMaterialList"
-          :rowKey="'rawMaterialId'"
-        >
-        </d-table>
-      </template>
       <template #action="{ record }">
         <a-button type="primary" size="small" @click="deleteData(record)">删除</a-button>
       </template>
@@ -28,33 +20,32 @@
     v-model:visible="showModal"
     :form-data="formData"
     :is-modify="Boolean(formData[rowKey])"
-    :materialArr="data && data.materialArr"
     @update="update"
   />
 </template>
 <script>
 import { defineComponent, reactive, toRefs } from 'vue';
 import { product } from '/@/api/product/index';
-import { bom, bomMaterial } from './config';
 import { deleteFun } from '/@/utils/operate/index';
-import DAdd from './add-bom.vue';
+import { list } from './config';
+import DAdd from './add.vue';
 
 export default defineComponent({
-  name: 'DMaterialBom',
+  name: 'DSettingAccountData',
   components: { DAdd },
   setup() {
     const state = reactive({
-      title: 'BOM',
+      title: '用户',
       loading: false,
       data: [],
       rowKey: '',
-      bomMaterial: [],
       showModal: false,
       formData: {},
     });
-    const api = '/bom';
+    const api = '/user';
+
     const columns = [];
-    bom.forEach((item) => {
+    list.forEach((item) => {
       const { dataIndex, rowKey, hideTable } = item;
       if (rowKey) {
         state.rowKey = dataIndex;
@@ -64,7 +55,7 @@ export default defineComponent({
       }
     });
     columns.push({ title: '操作', dataIndex: 'action', align: 'center', width: '80px', slots: { customRender: 'action' } });
-    state.bomMaterial = bomMaterial;
+
     const query = () => {
       state.loading = true;
       product({ api, method: 'get' }).then((res) => {
@@ -92,6 +83,10 @@ export default defineComponent({
         update();
       });
     };
+    const modify = (item) => {
+      state.showModal = true;
+      state.formData = item;
+    };
     query();
     return {
       ...toRefs(state),
@@ -100,6 +95,7 @@ export default defineComponent({
       update,
       add,
       deleteData,
+      modify,
     };
   },
 });
