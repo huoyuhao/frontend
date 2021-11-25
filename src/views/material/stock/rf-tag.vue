@@ -7,11 +7,14 @@
       class="d-form"
       :label-col="{ span: 4 }" :wrapper-col="{ span: 12 }"
     >
-      <a-form-item label="RF标签码" name="tagStr">
-        <a-textarea v-model:value="tagStr" placeholder="请输入RF标签码" :auto-size="{ minRows: 3, maxRows: 6 }" allow-clear />
+      <a-form-item label="操作类型">
+        <a-radio-group v-model:value="operateType" button-style="solid">
+          <a-radio-button value="create">标签入厂</a-radio-button>
+          <a-radio-button value="modify">标签初始化</a-radio-button>
+        </a-radio-group>
       </a-form-item>
-      <a-form-item label="物料位置" name="materialEntityPosition">
-        <a-input-number v-model:value="formItem.materialEntityPosition" placeholder="输入输入物料位置" />
+      <a-form-item label="RF标签码">
+        <a-textarea v-model:value="tagStr" placeholder="请输入RF标签码" :auto-size="{ minRows: 3, maxRows: 6 }" allow-clear />
       </a-form-item>
       <a-form-item :wrapper-col="{ span: 12, offset: 4 }">
         <a-button class="d-button" type="primary" @click="submit">提交</a-button>
@@ -22,23 +25,24 @@
 <script>
 import { computed, defineComponent, reactive, toRefs } from 'vue';
 import { product } from '/@/api/product/index';
-import { message, Form } from 'ant-design-vue';
+import { message, Form, Radio } from 'ant-design-vue';
 
 export default defineComponent({
-  name: 'DMaterialExhaust',
-  components: { },
+  name: 'DMaterialRfTag',
+  components: {
+    'a-radio-group': Radio.Group,
+    'a-radio-button': Radio.Button,
+  },
   setup() {
     const state = reactive({
       title: '标签初始化',
       tagStr: '',
+      operateType: 'create',
     });
-    const api = '/material/entity';
+    const api = '/rfTag';
 
     const formItem = reactive({
       rfTagCodeList: [],
-      materialEntityAction: 4,
-      materialEntityPositionType: 4,
-      materialEntityPosition: null,
     });
     const ruleValidate = reactive({});
     const { useForm } = Form;
@@ -50,7 +54,8 @@ export default defineComponent({
     });
     const submit = () => {
       state.loading = true;
-      product({ api, method: 'put', data: formItem }).then(() => {
+      const method = state.operateType === 'modify' ? 'put' : 'post';
+      product({ api, method, data: formItem }).then(() => {
         message.success(`${state.title}成功`);
         resetFields();
         state.tagStr = '';

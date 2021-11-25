@@ -8,19 +8,25 @@
       :label-col="{ span: 4 }" :wrapper-col="{ span: 12 }"
     >
       <a-form-item label="物料" name="materialId">
-          <a-select
-            v-model:value="formItem.materialId"
-            placeholder="请选择"
-            show-search
-            option-filter-prop="label"
-            :options="materialArr"
-          />
+        <a-select
+          v-model:value="formItem.materialId"
+          placeholder="请选择"
+          show-search
+          option-filter-prop="label"
+          :options="materialArr"
+        />
+      </a-form-item>
+      <a-form-item label="物料位置" name="materialEntityPosition">
+        <a-select
+          v-model:value="formItem.materialEntityPosition"
+          placeholder="请选择"
+          show-search
+          option-filter-prop="label"
+          :options="materialEntityPositionArr"
+        />
       </a-form-item>
       <a-form-item label="RF标签码" name="tagStr">
         <a-textarea v-model:value="tagStr" placeholder="请输入RF标签码" :auto-size="{ minRows: 3, maxRows: 6 }" allow-clear />
-      </a-form-item>
-      <a-form-item label="物料位置" name="materialEntityPosition">
-        <a-input-number v-model:value="formItem.materialEntityPosition" placeholder="输入输入物料位置" />
       </a-form-item>
       <a-form-item label="元素数量" name="materialEntityElementNumber">
         <a-input-number v-model:value="formItem.materialEntityElementNumber" placeholder="输入物料件内元素数量" />
@@ -71,10 +77,18 @@ export default defineComponent({
         .catch();
     };
     const materialArr = ref([]);
+    const materialEntityPositionArr = ref([]);
+
     const query = () => {
       product({ api: '/material', method: 'get' }).then((res) => {
         materialArr.value = res.map((item) => {
           return { value: item.materialId, label: item.materialName };
+        });
+      })
+        .catch();
+      product({ api: '/warehouse', method: 'get' }).then((res) => {
+        materialEntityPositionArr.value = res.map((item) => {
+          return { value: item.warehouseId, label: item.warehouseName };
         });
       })
         .catch();
@@ -84,6 +98,7 @@ export default defineComponent({
       ...toRefs(state),
       formItem,
       materialArr,
+      materialEntityPositionArr,
       submit,
     };
   },

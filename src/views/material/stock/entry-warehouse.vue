@@ -7,11 +7,17 @@
       class="d-form"
       :label-col="{ span: 4 }" :wrapper-col="{ span: 12 }"
     >
+      <a-form-item label="物料位置" name="materialEntityPosition">
+        <a-select
+          v-model:value="formItem.materialEntityPosition"
+          placeholder="请选择"
+          show-search
+          option-filter-prop="label"
+          :options="materialEntityPositionArr"
+        />
+      </a-form-item>
       <a-form-item label="RF标签码" name="tagStr">
         <a-textarea v-model:value="tagStr" placeholder="请输入RF标签码" :auto-size="{ minRows: 3, maxRows: 6 }" allow-clear />
-      </a-form-item>
-      <a-form-item label="物料位置" name="materialEntityPosition">
-        <a-input-number v-model:value="formItem.materialEntityPosition" placeholder="输入输入物料位置" />
       </a-form-item>
       <a-form-item :wrapper-col="{ span: 12, offset: 4 }">
         <a-button class="d-button" type="primary" @click="submit">提交</a-button>
@@ -20,7 +26,7 @@
   </d-card>
 </template>
 <script>
-import { computed, defineComponent, reactive, toRefs } from 'vue';
+import { computed, defineComponent, reactive, toRefs, ref } from 'vue';
 import { product } from '/@/api/product/index';
 import { message, Form } from 'ant-design-vue';
 
@@ -57,9 +63,21 @@ export default defineComponent({
       })
         .catch();
     };
+    const materialEntityPositionArr = ref([]);
+
+    const query = () => {
+      product({ api: '/warehouse', method: 'get' }).then((res) => {
+        materialEntityPositionArr.value = res.map((item) => {
+          return { value: item.warehouseId, label: item.warehouseName };
+        });
+      })
+        .catch();
+    };
+    query();
     return {
       ...toRefs(state),
       formItem,
+      materialEntityPositionArr,
       submit,
     };
   },

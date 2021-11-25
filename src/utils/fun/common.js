@@ -50,3 +50,8 @@ export const sortArrByKey = (data, key) => {
   });
   return Object.values(result).flat();
 };
+
+export const getTime = (time = +new Date()) => {
+  const date = new Date(time); // 增加8小时
+  return date.toJSON().substr(0, 19).replace('T', ' ');
+};

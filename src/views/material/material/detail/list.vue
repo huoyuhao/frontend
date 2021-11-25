@@ -10,6 +10,9 @@
       <template #header>
         <a-button type="primary" @click="query">刷新</a-button>
       </template>
+      <template #materialEntityPositionType="{ text }">
+        <p>{{ text === 0 ? '仓库' : '流水线'}}</p>
+      </template>
       <template #action="{ record }">
         <a-button type="primary" size="small" @click="queryTrace(record)">物料轨迹</a-button>
       </template>
@@ -21,6 +24,7 @@
     width="1200px"
     cancelText="取消"
     okText="提交"
+    @ok="visibleModal=!visibleModal"
   >
     <d-table
       :loading="loading1"
@@ -32,14 +36,24 @@
       <template #header>
         <a-button type="primary" @click="query">刷新</a-button>
       </template>
+      <template #materialEntityPositionType="{ text }">
+        <p>{{ text === 0 ? '仓库' : '流水线'}}</p>
+      </template>
+      <template #materialEntityAction="{ text }">
+        <p>{{ actionObj[text] || text }}</p>
+      </template>
+      <template #createTime="{ text }">
+        <p>{{ getTime(text) }}</p>
+      </template>
     </d-table>
   </a-modal>
 </template>
 <script>
 import { defineComponent, reactive, toRefs } from 'vue';
 import { product } from '/@/api/product/index';
-import { detail, trace } from './config';
+import { detail, trace, actionObj } from './config';
 import { useRoute } from 'vue-router';
+import { getTime } from '/@/utils/fun/common';
 
 export default defineComponent({
   name: 'DMaterialMaterialDetial',
@@ -52,14 +66,37 @@ export default defineComponent({
       loading1: false,
       data: [],
       dataTrace: [],
-      traceRowKey: 'materialEntityTraceId',
-      rowKey: 'materialEntityId',
+      traceRowKey: '',
+      rowKey: '',
       visibleModal: false,
+      actionObj,
     });
     const { materialId } = route.query;
     const api = `/material/entity?materialId=${materialId}`;
-    const columnsTrace = trace;
-    const columns = [...detail, { title: '操作', dataIndex: 'action', align: 'center', width: '80px', slots: { customRender: 'action' } }];
+
+    const columnsTrace = [];
+    trace.forEach((item) => {
+      const { dataIndex, rowKey, hideTable } = item;
+      if (rowKey) {
+        state.traceRowKey = dataIndex;
+      }
+      if (!hideTable) {
+        columnsTrace.push(item);
+      }
+    });
+
+    const columns = [];
+    detail.forEach((item) => {
+      const { dataIndex, rowKey, hideTable } = item;
+      if (rowKey) {
+        state.rowKey = dataIndex;
+      }
+      if (!hideTable) {
+        columns.push(item);
+      }
+    });
+
+    columns.push({ title: '操作', dataIndex: 'action', align: 'center', width: '80px', slots: { customRender: 'action' } });
 
     const query = () => {
       state.loading = true;
@@ -90,6 +127,7 @@ export default defineComponent({
       query,
       update,
       queryTrace,
+      getTime,
     };
   },
 });

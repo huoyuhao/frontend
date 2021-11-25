@@ -10,7 +10,7 @@
   >
     <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 14 }">
       <template v-for="item in list">
-        <a-form-item v-if="item.dataIndex === 'pwd'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
+        <a-form-item v-if="item.dataIndex === 'psw'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
           <a-input-password v-model:value="formItem[item.dataIndex]" placeholder="请输入密码" />
         </a-form-item>
         <a-form-item v-else-if="!item.hideForm" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">

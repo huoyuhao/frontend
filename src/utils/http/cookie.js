@@ -8,7 +8,7 @@ export const getToken = () => {
 export const getTokenKey = () => {
   return TokenKey;
 };
-export const setToken = (token: any) => {
+export const setToken = (token) => {
   return Cookies.set(TokenKey, token);
 };
 export const removeToken = () => {

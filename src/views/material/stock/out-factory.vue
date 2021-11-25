@@ -10,27 +10,24 @@
       <a-form-item label="RF标签码" name="tagStr">
         <a-textarea v-model:value="tagStr" placeholder="请输入RF标签码" :auto-size="{ minRows: 3, maxRows: 6 }" allow-clear />
       </a-form-item>
-      <a-form-item label="物料位置" name="materialEntityPosition">
-        <a-input-number v-model:value="formItem.materialEntityPosition" placeholder="输入输入物料位置" />
+      <a-form-item label="仓库管理员">
+        <a-select
+          v-model:value="formItem.warehouseKeeperId"
+          placeholder="请选择"
+          show-search
+          option-filter-prop="label"
+          :options="userArr"
+        />
       </a-form-item>
-        <a-form-item label="仓库管理员">
-          <a-select
-            v-model:value="formItem.warehouseKeeperId"
-            placeholder="请选择"
-            show-search
-            option-filter-prop="label"
-            :options="userArr"
-          />
-        </a-form-item>
-        <a-form-item label="经办人">
-          <a-select
-            v-model:value="formItem.ownerId"
-            placeholder="请选择"
-            show-search
-            option-filter-prop="label"
-            :options="userArr"
-          />
-        </a-form-item>
+      <a-form-item label="经办人">
+        <a-select
+          v-model:value="formItem.ownerId"
+          placeholder="请选择"
+          show-search
+          option-filter-prop="label"
+          :options="userArr"
+        />
+      </a-form-item>
       <a-form-item :wrapper-col="{ span: 12, offset: 4 }">
         <a-button class="d-button" type="primary" @click="submit">提交</a-button>
       </a-form-item>
@@ -56,7 +53,6 @@ export default defineComponent({
       rfTagCodeList: [],
       materialEntityAction: 3,
       materialEntityPositionType: 3,
-      materialEntityPosition: null,
       warehouseKeeperId: '',
       ownerId: '',
     });
@@ -82,7 +78,7 @@ export default defineComponent({
     const queryUser = () => {
       product({ api: '/user' }).then((res) => {
         userArr.value = res.map((item) => {
-          return { value: item.userId, label: `${item.userCode} - ${item.userName}` };
+          return { value: item.userId, label: `${item.userCode}(${item.userName})` };
         });
       })
         .catch();

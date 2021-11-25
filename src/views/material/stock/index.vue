@@ -15,7 +15,7 @@ export default defineComponent({
       { key: 'outFactory', name: '出厂', route: '/material/stock/outFactory', file: import('./out-factory.vue') },
       { key: 'entryWarehouse', name: '生产入库', route: '/material/stock/entryWarehouse', file: import('./entry-warehouse.vue') },
       { key: 'outWarehouse', name: '出库', route: '/material/stock/outWarehouse', file: import('./out-warehouse.vue') },
-      { key: 'exhaust', name: '标签初始化', route: '/material/stock/exhaust', file: import('./exhaust.vue') },
+      { key: 'rfTag', name: '标签初始化', route: '/material/stock/rfTag', file: import('./rf-tag.vue') },
     ];
     const active = ref('');
     watchEffect(() => {
