@@ -21,17 +21,21 @@
       </a-form-item>
     </a-form>
   </d-card>
+  <d-material-detail v-if="materialDetail && materialDetail.length > 0 && operateType=== 'modify'" :data="materialDetail" :loading="loading" @update="queryMaterialDetail"></d-material-detail>
 </template>
 <script>
 import { computed, defineComponent, reactive, toRefs } from 'vue';
 import { product } from '/@/api/product/index';
 import { message, Form, Radio } from 'ant-design-vue';
+import { getMaterialDetail } from './config';
+import DMaterialDetail from '/@/views/material/material/detail/detail.vue';
 
 export default defineComponent({
   name: 'DMaterialRfTag',
   components: {
     'a-radio-group': Radio.Group,
     'a-radio-button': Radio.Button,
+    DMaterialDetail,
   },
   setup() {
     const state = reactive({
@@ -62,10 +66,15 @@ export default defineComponent({
       })
         .catch();
     };
+    const { rfTagCodeList } = toRefs(formItem);
+    const { loading, materialDetail, queryMaterialDetail } = getMaterialDetail(rfTagCodeList);
     return {
       ...toRefs(state),
       formItem,
       submit,
+      loading,
+      materialDetail,
+      queryMaterialDetail,
     };
   },
 });

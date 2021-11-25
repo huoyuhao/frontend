@@ -1,14 +1,34 @@
-export const type = [
-  { title: '唯一标识', dataIndex: 'materialTypeId', rowKey: true, hideTable: true, hideForm: true },
-  { title: '物料组别代码', dataIndex: 'materialTypeCode', required: true },
-  { title: '物料组别名称', dataIndex: 'materialTypeName', required: true },
-  { title: '助记码', dataIndex: 'materialTypeMnemonic', required: true },
-  { title: '备注', dataIndex: 'description' },
-];
-export const unit = [
-  { title: '唯一标识', dataIndex: 'materialUnitId', rowKey: true, hideForm: true },
-  { title: '物料计量单位代码', dataIndex: 'materialUnitCode', required: true },
-  { title: '物料计量单位名称', dataIndex: 'materialUnitName', required: true },
-  { title: '助记码', dataIndex: 'materialUnitMnemonic', required: true },
-  { title: '备注', dataIndex: 'description' },
-];
+import { watch, ref } from 'vue';
+import { product } from '/@/api/product/index';
+
+export const getMaterialDetail = (rfTagCodeList) => {
+  console.log(rfTagCodeList);
+  const materialDetail = ref([]);
+  const loading = ref([]);
+  const timer = ref(null);
+
+  watch(() => {
+    return rfTagCodeList.value;
+  }, (value) => {
+    console.log(value);
+    clearTimeout(timer.value);
+    timer.value = setTimeout(() => {
+      queryMaterialDetail(value);
+    }, 2000);
+  });
+
+  const queryMaterialDetail = (value) => {
+    if (value.length === 0) return materialDetail.value = [];
+    loading.value = true;
+    product({ api: '/material/entity', method: 'post', data: { rfTagCodeList: value } }).then((res) => {
+      loading.value = false;
+      materialDetail.value = res;
+    })
+      .catch();
+  };
+  return {
+    loading,
+    materialDetail,
+    queryMaterialDetail,
+  };
+};

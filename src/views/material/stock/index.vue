@@ -11,11 +11,11 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const list = [
-      { key: 'entryFactory', name: '入厂', route: '/material/stock/entryFactory', file: import('./entry-factory.vue') },
-      { key: 'outFactory', name: '出厂', route: '/material/stock/outFactory', file: import('./out-factory.vue') },
-      { key: 'entryWarehouse', name: '生产入库', route: '/material/stock/entryWarehouse', file: import('./entry-warehouse.vue') },
-      { key: 'outWarehouse', name: '出库', route: '/material/stock/outWarehouse', file: import('./out-warehouse.vue') },
       { key: 'rfTag', name: '标签初始化', route: '/material/stock/rfTag', file: import('./rf-tag.vue') },
+      { key: 'entryFactory', name: '入厂', route: '/material/stock/entryFactory', file: import('./entry-factory.vue') },
+      { key: 'outWarehouse', name: '出库', route: '/material/stock/outWarehouse', file: import('./out-warehouse.vue') },
+      { key: 'entryWarehouse', name: '生产入库', route: '/material/stock/entryWarehouse', file: import('./entry-warehouse.vue') },
+      { key: 'outFactory', name: '出厂', route: '/material/stock/outFactory', file: import('./out-factory.vue') },
     ];
     const active = ref('');
     watchEffect(() => {

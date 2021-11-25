@@ -24,15 +24,18 @@
       </a-form-item>
     </a-form>
   </d-card>
+  <d-material-detail v-if="materialDetail && materialDetail.length > 0" :data="materialDetail" :loading="loading" @update="queryMaterialDetail"></d-material-detail>
 </template>
 <script>
 import { computed, defineComponent, reactive, toRefs, ref } from 'vue';
 import { product } from '/@/api/product/index';
 import { message, Form } from 'ant-design-vue';
+import { getMaterialDetail } from './config';
+import DMaterialDetail from '/@/views/material/material/detail/detail.vue';
 
 export default defineComponent({
   name: 'DMaterialEntryFactory',
-  components: { },
+  components: { DMaterialDetail },
   setup() {
     const state = reactive({
       title: '生产入库',
@@ -63,8 +66,10 @@ export default defineComponent({
       })
         .catch();
     };
-    const materialEntityPositionArr = ref([]);
+    const { rfTagCodeList } = toRefs(formItem);
+    const { loading, materialDetail, queryMaterialDetail } = getMaterialDetail(rfTagCodeList);
 
+    const materialEntityPositionArr = ref([]);
     const query = () => {
       product({ api: '/warehouse', method: 'get' }).then((res) => {
         materialEntityPositionArr.value = res.map((item) => {
@@ -79,6 +84,9 @@ export default defineComponent({
       formItem,
       materialEntityPositionArr,
       submit,
+      loading,
+      materialDetail,
+      queryMaterialDetail,
     };
   },
 });

@@ -1,11 +1,11 @@
 export const detail = [
   { title: '唯一标识', dataIndex: 'materialEntityId', rowKey: true, hideTable: true },
+  { title: 'RF标签码', dataIndex: 'rfTagCode' },
   { title: '物料名称', dataIndex: 'materialName', filter: true },
   { title: '元素数量', dataIndex: 'materialEntityElementNumber' },
   { title: '物料状态', dataIndex: 'materialEntityStatus', filter: true },
   { title: '物料位置', dataIndex: 'materialEntityPositionType', slots: { customRender: 'materialEntityPositionType' }, filter: true },
   { title: '仓库ID', dataIndex: 'materialEntityPosition', filter: true },
-  { title: 'RF标签码', dataIndex: 'rfTagCode' },
   { title: '经办人', dataIndex: 'ownerId' },
   { title: '仓库管理员', dataIndex: 'warehouseKeeperId' },
   { title: '描述', dataIndex: 'description' },

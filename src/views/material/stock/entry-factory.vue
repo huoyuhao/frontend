@@ -43,7 +43,7 @@ import { product } from '/@/api/product/index';
 import { message, Form } from 'ant-design-vue';
 export default defineComponent({
   name: 'DMaterialEntryFactory',
-  components: { },
+  components: {  },
   setup() {
     const state = reactive({
       title: '入厂',
@@ -68,7 +68,6 @@ export default defineComponent({
       });
     });
     const submit = () => {
-      state.loading = true;
       product({ api, method: 'put', data: formItem }).then(() => {
         message.success(`${state.title}成功`);
         resetFields();
@@ -78,7 +77,6 @@ export default defineComponent({
     };
     const materialArr = ref([]);
     const materialEntityPositionArr = ref([]);
-
     const query = () => {
       product({ api: '/material', method: 'get' }).then((res) => {
         materialArr.value = res.map((item) => {
