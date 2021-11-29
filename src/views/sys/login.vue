@@ -20,7 +20,7 @@
 </template>
 <script>
 import { defineComponent, reactive, ref, toRefs } from 'vue';
-import { sys } from '/@/api/sys/index';
+import { product } from '/@/api/product/index';
 import { useRouter } from 'vue-router';
 import { setToken } from '/@/utils/http/auth';
 
@@ -41,7 +41,7 @@ export default defineComponent({
     });
     const submit = () => {
       state.loading = true;
-      sys({ api: '/login', method: 'post', data: formState }).then((res) => {
+      product({ api: '/login', method: 'post', data: formState }).then((res) => {
         state.loading = false;
         const { token } = res;
         setToken(token);

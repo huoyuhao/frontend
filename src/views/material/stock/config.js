@@ -2,7 +2,6 @@ import { watch, ref } from 'vue';
 import { product } from '/@/api/product/index';
 
 export const getMaterialDetail = (rfTagCodeList) => {
-  console.log(rfTagCodeList);
   const materialDetail = ref([]);
   const loading = ref([]);
   const timer = ref(null);

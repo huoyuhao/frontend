@@ -50,9 +50,7 @@ export const addFun = (props, emit, { resetFields, validate }, { formItem, api }
         const method = isModify.value ? 'put' : 'post';
         const data = {};
         Object.keys(formItem).forEach((item) => {
-          if (formItem[item]) {
-            data[item] = formItem[item];
-          }
+          data[item] = formItem[item];
         });
         const postData = { api, method, data };
         product(postData)

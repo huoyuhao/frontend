@@ -14,11 +14,16 @@
       <template #targetMaterialId="{ text }">
         <p>{{ materialObj[text] }}</p>
       </template>
-      <template #bomId="{ text }">
-        <p>{{ bomObj[text] }}</p>
-      </template>
       <template #action="{ record }">
         <a-button type="primary" size="small" @click="deleteData(record)">删除</a-button>
+      </template>
+      <template #expandedRowRender="{ record }">
+        <d-table
+          :columns="taskMaterial"
+          :data-source="record.rawMaterialList"
+          :rowKey="'rawMaterialId'"
+        >
+        </d-table>
       </template>
     </d-table>
   </d-card>
@@ -26,7 +31,6 @@
     v-model:visible="showModal"
     :form-data="formData"
     :is-modify="Boolean(formData && formData[rowKey])"
-    :bomArr="bomArr"
     :materialArr="materialArr"
     @update="update"
   />
@@ -35,11 +39,11 @@
 import { defineComponent, reactive, toRefs } from 'vue';
 import { product } from '/@/api/product/index';
 import { deleteFun } from '/@/utils/operate/index';
-import { list } from './config';
+import { list, taskMaterial } from './config';
 import DAdd from './add-data.vue';
 
 export default defineComponent({
-  name: 'DProduceTaskData',
+  name: 'DProduceProcessData',
   components: { DAdd },
   setup() {
     const state = reactive({
@@ -49,12 +53,11 @@ export default defineComponent({
       rowKey: '',
       showModal: false,
       formData: null,
-      bomArr: [],
-      bomObj: {},
       materialArr: [],
       materialObj: {},
+      taskMaterial,
     });
-    const api = '/StandardProcess';
+    const api = '/standard/process';
 
     const columns = [];
     list.forEach((item) => {
@@ -82,16 +85,6 @@ export default defineComponent({
         res.forEach((item) => {
           state.materialArr.push({ value: item.materialId, label: item.materialName });
           state.materialObj[item.materialId] = item.materialName;
-        });
-      })
-        .catch();
-      // 获取bom数据
-      product({ api: '/bom', method: 'get' }).then((res) => {
-        res.forEach((item) => {
-          state.bomObj = [];
-          state.materialObj = {};
-          state.bomObj.push({ value: item.bomId, label: item.bomName });
-          state.bomObj[item.bomId] = item.bomName;
         });
       })
         .catch();

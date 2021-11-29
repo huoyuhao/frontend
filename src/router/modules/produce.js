@@ -4,43 +4,60 @@ const produce = {
   path: '/produce',
   name: 'produce',
   component: LAYOUTS,
-  redirect: '/produce/task',
+  redirect: '/produce/process',
   meta: {
     title: '生产管理',
     icon: 'OrderedListOutlined',
   },
   children: [
     {
-      path: '/produce/task',
-      name: 'produce-task',
-      redirect: '/produce/task/data',
+      path: '/produce/process',
+      name: 'produce-process',
+      redirect: '/produce/process/data',
       meta: { title: '标准工序' },
       component: { template: '<router-view />' },
       children: [
         {
-          path: '/produce/task/:type',
-          name: 'produce-task-type',
+          path: '/produce/process/:type',
+          name: 'produce-process-type',
           meta: { hideMenu: true },
           component: () => {
-            return import('/@/views/produce/task/index.vue');
+            return import('/@/views/produce/process/index.vue');
           },
         },
       ],
     },
     {
-      path: '/produce/plan',
-      name: 'produce-plan',
-      redirect: '/produce/plan/data',
+      path: '/produce/task',
+      name: 'produce-task',
+      redirect: '/produce/task/data',
       meta: { title: '生产计划' },
       component: { template: '<router-view />' },
       children: [
         {
-          path: '/produce/plan/:type',
-          name: 'produce-plan-type',
-          meta: { title: '计划', hideMenu: true },
+          path: '/produce/task/:type',
+          name: 'produce-task-type',
+          meta: { title: '生产计划', hideMenu: true },
           component: () => {
-            return import('/@/views/produce/plan/index.vue');
+            return import('/@/views/produce/task/index.vue');
           },
+        },
+        {
+          path: '/produce/task/detail',
+          name: 'produce-task-type',
+          redirect: '/produce/task/detail/list',
+          meta: { hideMenu: true },
+          component: { template: '<router-view />' },
+          children: [
+            {
+              path: '/produce/task/detail/:type',
+              name: 'produce-task-detail-type',
+              component: () => {
+                return import('/@/views/produce/task/detail/index.vue');
+              },
+              meta: { title: '生产计划详情', hideMenu: true },
+            },
+          ],
         },
       ],
     },

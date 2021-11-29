@@ -11,8 +11,14 @@
         <a-button type="primary" @click="query">刷新</a-button>
         <a-button type="primary" @click="add">新增</a-button>
       </template>
-      <template #targetMaterialId="{ text }">
-        <p>{{ materialObj[text] }}</p>
+      <template #productiveTaskName="{ record, text }">
+        <a @click="routeLink(record)">{{ text }}</a>
+      </template>
+      <template #targetMaterialIdList="{ text }">
+        <p>{{ text }}</p>
+      </template>
+      <template #requiredDate="{ text }">
+        <p>{{ getTime(text) }}</p>
       </template>
       <template #action="{ record }">
         <a-button type="primary" size="small" @click="deleteData(record)">删除</a-button>
@@ -23,6 +29,7 @@
     v-model:visible="showModal"
     :form-data="formData"
     :is-modify="Boolean(formData && formData[rowKey])"
+    :userArr="userArr"
     :materialArr="materialArr"
     @update="update"
   />
@@ -32,23 +39,27 @@ import { defineComponent, reactive, toRefs } from 'vue';
 import { product } from '/@/api/product/index';
 import { deleteFun } from '/@/utils/operate/index';
 import { list } from './config';
+import { useRouter } from 'vue-router';
 import DAdd from './add-data.vue';
 
 export default defineComponent({
   name: 'DProduceTaskData',
   components: { DAdd },
   setup() {
+    const router = useRouter();
     const state = reactive({
-      title: '生产工序',
+      title: '生产计划',
       loading: false,
       data: [],
       rowKey: '',
       showModal: false,
       formData: null,
+      userArr: [],
+      userObj: {},
       materialArr: [],
       materialObj: {},
     });
-    const api = '/StandardProcess';
+    const api = '/productive/task';
 
     const columns = [];
     list.forEach((item) => {
@@ -79,13 +90,27 @@ export default defineComponent({
         });
       })
         .catch();
+
+      product({ api: '/user' }).then((res) => {
+        state.userArr = [];
+        state.userObj = {};
+        res.forEach((item) => {
+          state.userArr.push({ value: item.userId, label: `${item.userCode}(${item.userName})` });
+          state.userObj[item.userId] = item.materialName;
+        });
+      })
+        .catch();
     };
     const update = () => {
       query();
     };
     const add = () => {
       state.showModal = true;
-      state.formData = {};
+      state.formData = {
+        urgency: 0,
+        status: 0,
+        targetMaterialIdList: [],
+      };
     };
     const { deleteModal } = deleteFun();
     const deleteData = (item) => {
@@ -103,10 +128,18 @@ export default defineComponent({
       state.showModal = true;
       state.formData = item;
     };
+    const routeLink = (record) => {
+      const { materialId } = record;
+      router.push({
+        path: '/produce/task/detail',
+        query: { materialId },
+      });
+    };
     query();
     return {
       ...toRefs(state),
       columns,
+      routeLink,
       query,
       update,
       add,

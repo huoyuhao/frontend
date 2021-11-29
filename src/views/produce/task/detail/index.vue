@@ -5,13 +5,13 @@
 import { defineComponent, watchEffect, ref } from 'vue';
 import { useRoute } from 'vue-router';
 export default defineComponent({
-  name: 'DPeoduceTaskIndex',
+  name: 'DProduceTaskDetailIndex',
   components: {
   },
   setup() {
     const route = useRoute();
     const list = [
-      { key: 'data', name: '生产计划', route: '/produce/plan/data', file: import('./data.vue') },
+      { key: 'list', name: '生产计划详情', route: '/produce/task/detail/list', file: import('./list.vue') },
     ];
     const active = ref('');
     watchEffect(() => {

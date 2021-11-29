@@ -48,7 +48,7 @@ export default defineComponent({
       loading: false,
       data: [],
       rowKey: '',
-      bomMaterial: [],
+      bomMaterial,
       showModal: false,
       formData: {},
     });
@@ -64,7 +64,6 @@ export default defineComponent({
       }
     });
     columns.push({ title: '操作', dataIndex: 'action', align: 'center', width: '80px', slots: { customRender: 'action' } });
-    state.bomMaterial = bomMaterial;
     const query = () => {
       state.loading = true;
       product({ api, method: 'get' }).then((res) => {

@@ -10,7 +10,17 @@
   >
     <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 14 }">
       <template v-for="item in list">
-        <a-form-item v-if="item.dataIndex === 'targetMaterialId'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
+        <a-form-item v-if="item.dataIndex === 'targetMaterialIdList'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
+          <a-select
+            v-model:value="formItem[item.dataIndex]"
+            placeholder="请选择"
+            show-search
+            mode="multiple"
+            option-filter-prop="label"
+            :options="materialArr"
+          />
+        </a-form-item>
+        <a-form-item v-else-if="item.dataIndex === 'requiredDate'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
           <a-select
             v-model:value="formItem[item.dataIndex]"
             placeholder="请选择"
@@ -19,43 +29,27 @@
             :options="materialArr"
           />
         </a-form-item>
-        <template v-else-if="item.dataIndex === 'rawMaterialList'">
-          <a-form-item
-            v-for="(element, index) in formItem.rawMaterialList"
-            :key="element + item + index"
-            :label="item.title"
-            :name="['domains1', index, 'value']"
-          >
-            <a-row align="middle">
-              <a-col span="8">
-                <a-select
-                  v-model:value="element.rawMaterialId"
-                  placeholder="请选择"
-                  show-search
-                  option-filter-prop="label"
-                  :options="materialArr"
-                />
-              </a-col>
-              <a-col span="11" offset="2">
-                <a-input-number v-model:value="element.rawMaterialNum" placeholder="请输入原材料数量" />
-              </a-col>
-              <a-col span="1">
-                <MinusCircleOutlined
-                  v-if="formItem.rawMaterialList.length > 1"
-                  class="dynamic-delete-button"
-                  :disabled="formItem.rawMaterialList.length === 1"
-                  @click="removeRawMaterialList(element)"
-                />
-              </a-col>
-            </a-row>
-          </a-form-item>
-          <a-form-item :key="item.dataIndex">
-            <a-button type="dashed" style="width: 60%; margin-left: 180px" @click="addRawMaterialList">
-              <PlusOutlined />
-              新增物料
-            </a-button>
-          </a-form-item>
-        </template>
+        <a-form-item v-else-if="item.dataIndex === 'urgency'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
+          <a-radio-group v-model:value="formItem[item.dataIndex]" button-style="solid">
+            <a-radio-button :value="0">正常</a-radio-button>
+            <a-radio-button :value="1">紧急</a-radio-button>
+          </a-radio-group>
+        </a-form-item>
+        <a-form-item v-else-if="item.dataIndex === 'status'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
+          <a-radio-group v-model:value="formItem[item.dataIndex]" button-style="solid">
+            <a-radio-button :value="0">正常</a-radio-button>
+            <a-radio-button :value="1">异常</a-radio-button>
+          </a-radio-group>
+        </a-form-item>
+        <a-form-item v-else-if="['ownerId', 'auditorId'].includes(item.dataIndex)" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
+          <a-select
+            v-model:value="formItem[item.dataIndex]"
+            placeholder="请选择"
+            show-search
+            option-filter-prop="label"
+            :options="userArr"
+          />
+        </a-form-item>
         <a-form-item v-else-if="!item.hideForm" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
           <a-input v-model:value="formItem[item.dataIndex]" />
         </a-form-item>
@@ -64,15 +58,18 @@
   </a-modal>
 </template>
 <script>
-import { defineComponent, reactive, toRefs } from 'vue';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons-vue';
+import { defineComponent, reactive, toRefs, ref } from 'vue';
 import { addFun } from '/@/utils/operate/index';
 import { list } from './config';
-import { Form } from 'ant-design-vue';
+import { Form, Radio } from 'ant-design-vue';
+import { product } from '/@/api/product/index';
 
 export default defineComponent({
   name: 'DAddTaskData',
-  components: { MinusCircleOutlined, PlusOutlined },
+  components: {
+    'a-radio-group': Radio.Group,
+    'a-radio-button': Radio.Button,
+  },
   props: {
     visible: {
       required: true,
@@ -93,7 +90,7 @@ export default defineComponent({
     materialArr: Array,
   },
   setup(props, { emit }) {
-    const api = '/StandardProcess';
+    const api = '/productive/task';
     const formItem = reactive({});
     const ruleValidate = reactive({});
 
@@ -103,36 +100,30 @@ export default defineComponent({
         ruleValidate[dataIndex] = [{ required: true, message: `${title}不能为空！` }];
       }
       formItem[dataIndex] = '';
-      if (dataIndex === 'rawMaterialList') {
-        formItem[dataIndex] = [];
-      }
     });
     const { useForm } = Form;
     const { resetFields, validate, validateInfos } = useForm(formItem, ruleValidate);
 
     const { visibleModal, close, submit } = addFun(toRefs(props), emit, { resetFields, validate }, { formItem, api });
 
-    const addRawMaterialList = () => {
-      formItem.rawMaterialList.push({
-        rawMaterialId: null,
-        rawMaterialNum: null,
-      });
+    const userArr = ref([]);
+    const queryUser = () => {
+      product({ api: '/user' }).then((res) => {
+        userArr.value = res.map((item) => {
+          return { value: item.userId, label: `${item.userCode}(${item.userName})` };
+        });
+      })
+        .catch();
     };
-    const removeRawMaterialList = (item) => {
-      const index = formItem.rawMaterialList.indexOf(item);
-      if (index !== -1) {
-        formItem.rawMaterialList.splice(index, 1);
-      }
-    };
+    queryUser();
     return {
-      addRawMaterialList,
-      removeRawMaterialList,
       list,
       formItem,
       visibleModal,
       validateInfos,
       close,
       submit,
+      userArr,
     };
   },
 });

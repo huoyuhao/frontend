@@ -9,7 +9,7 @@
     @cancel="close"
   >
     <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 14 }">
-      <template v-for="item in bom">
+      <template v-for="item in list">
         <a-form-item v-if="item.dataIndex === 'targetMaterialId'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
           <a-select
             v-model:value="formItem[item.dataIndex]"
@@ -21,6 +21,9 @@
         </a-form-item>
         <a-form-item v-else-if="item.dataIndex === 'targetMaterialNum'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
           <a-input-number v-model:value="formItem[item.dataIndex]" :placeholder="`请输入${item.title}`" />
+        </a-form-item>
+        <a-form-item v-else-if="item.dataIndex === 'pass'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
+          <a-input-number v-model:value="formItem[item.dataIndex]" :placeholder="`请输入${item.title}`" :max="100" :min="0" />
         </a-form-item>
         <template v-else-if="item.dataIndex === 'rawMaterialList'">
           <a-form-item
@@ -60,22 +63,21 @@
           </a-form-item>
         </template>
         <a-form-item v-else-if="!item.hideForm" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
-          <a-input v-model:value="formItem[item.dataIndex]" :disabled="isModify && (item.disabled || false)" />
+          <a-input v-model:value="formItem[item.dataIndex]" />
         </a-form-item>
       </template>
     </a-form>
   </a-modal>
 </template>
 <script>
-import { defineComponent, reactive, toRefs, ref } from 'vue';
+import { defineComponent, reactive, toRefs } from 'vue';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons-vue';
-import { product } from '/@/api/product/index';
 import { addFun } from '/@/utils/operate/index';
-import { bom } from './config';
+import { list } from './config';
 import { Form } from 'ant-design-vue';
 
 export default defineComponent({
-  name: 'DAddMaterialBom',
+  name: 'DAddProcessData',
   components: { MinusCircleOutlined, PlusOutlined },
   props: {
     visible: {
@@ -94,12 +96,14 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    materialArr: Array,
   },
   setup(props, { emit }) {
-    const api = '/bom';
+    const api = '/standard/process';
     const formItem = reactive({});
     const ruleValidate = reactive({});
-    bom.forEach((item) => {
+
+    list.forEach((item) => {
       const { title, dataIndex } = item;
       if (item.required) {
         ruleValidate[dataIndex] = [{ required: true, message: `${title}不能为空！` }];
@@ -113,16 +117,6 @@ export default defineComponent({
     const { resetFields, validate, validateInfos } = useForm(formItem, ruleValidate);
 
     const { visibleModal, close, submit } = addFun(toRefs(props), emit, { resetFields, validate }, { formItem, api });
-    const materialArr = ref([]);
-    const query = () => {
-      product({ api: '/material', method: 'get' }).then((res) => {
-        materialArr.value = res.map((item) => {
-          return { value: item.materialId, label: item.materialName };
-        });
-      })
-        .catch();
-    };
-    query();
 
     const addRawMaterialList = () => {
       formItem.rawMaterialList.push({
@@ -139,8 +133,7 @@ export default defineComponent({
     return {
       addRawMaterialList,
       removeRawMaterialList,
-      materialArr,
-      bom,
+      list,
       formItem,
       visibleModal,
       validateInfos,
