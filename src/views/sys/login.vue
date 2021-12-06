@@ -23,6 +23,7 @@ import { defineComponent, reactive, ref, toRefs } from 'vue';
 import { product } from '/@/api/product/index';
 import { useRouter } from 'vue-router';
 import { setToken } from '/@/utils/http/auth';
+import { getUserData } from '/@/utils/user/index';
 
 export default defineComponent({
   name: 'DLogin',
@@ -30,6 +31,7 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
+    const { setUserName } = getUserData();
     const formRef = ref();
     const state = reactive({
       loading: false,
@@ -45,6 +47,7 @@ export default defineComponent({
         state.loading = false;
         const { token } = res;
         setToken(token);
+        setUserName(formState.name);
         router.push({ name: 'home' });
       })
         .catch();

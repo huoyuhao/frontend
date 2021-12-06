@@ -1,5 +1,5 @@
 <template>
-  <a-layout>
+  <a-layout v-if="isRouterAlive">
     <a-layout-sider class="d-sider" v-model:collapsed="collapsed" :trigger="null" collapsible>
       <div class="d-logo">放置logo图片</div>
       <a-menu theme="dark" mode="inline" v-model:selectedKeys="selectedKeys"
@@ -59,10 +59,12 @@
   </a-layout>
 </template>
 <script>
-import { defineComponent, computed, reactive, toRefs, watchEffect } from 'vue';
+import { defineComponent, computed, reactive, toRefs, watchEffect, provide, readonly } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { basicRoutes } from '/@/router/index';
 import { removeToken } from '/@/utils/http/auth';
+import { getUserData } from '/@/utils/user/index';
+
 export default defineComponent({
   name: 'DLayout',
   components: {
@@ -70,10 +72,12 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const router = useRouter();
+    const { queryUser, userList, userArr, userObj, userNameObj } = getUserData();
     const state = reactive({
       breadcrumb: [],
       selectedKeys: [],
       collapsed: false,
+      isRouterAlive: false,
       openKeys: [],
     });
     const containerStyle = computed(() => {
@@ -120,6 +124,20 @@ export default defineComponent({
       removeToken();
       router.push({ name: 'login' });
     };
+
+    const query = async () => {
+      // 异步获取用户信息
+      await queryUser();
+      // 渲染后续页面
+      state.isRouterAlive = true;
+    };
+    query();
+    provide('queryUser', queryUser); // 向子孙提供刷新操作
+    provide('userArr', readonly(userArr)); // 向子孙提供数据
+    provide('userList', readonly(userList)); // 向子孙提供数据
+    provide('userObj', readonly(userObj)); // 向子孙提供数据
+    provide('userNameObj', readonly(userNameObj)); // 向子孙提供数据
+
     return {
       ...toRefs(state),
       containerStyle,

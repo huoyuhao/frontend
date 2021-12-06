@@ -11,7 +11,7 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const list = [
-      { key: 'data', name: '工序列表', route: '/produce/task/data', file: import('./data.vue') },
+      { key: 'data', name: '工序列表', route: '/produce/process/data', file: import('./data.vue') },
     ];
     const active = ref('');
     watchEffect(() => {

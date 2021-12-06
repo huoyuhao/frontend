@@ -13,6 +13,9 @@
       <template #materialEntityPositionType="{ text }">
         <p>{{ text === 0 ? '仓库' : '流水线'}}</p>
       </template>
+      <template #user="{ text }">
+        <p>{{ userNameObj[text] || text }}</p>
+      </template>
       <template #action="{ record }">
         <a-button type="primary" size="small" @click="queryTrace(record)">物料轨迹</a-button>
       </template>
@@ -39,6 +42,9 @@
       <template #materialEntityAction="{ text }">
         <p>{{ actionObj[text] || text }}</p>
       </template>
+      <template #user="{ text }">
+        <p>{{ userNameObj[text] || text }}</p>
+      </template>
       <template #createTime="{ text }">
         <p>{{ getTime(text) }}</p>
       </template>
@@ -46,7 +52,7 @@
   </a-modal>
 </template>
 <script>
-import { defineComponent, reactive, toRefs } from 'vue';
+import { defineComponent, reactive, toRefs, inject } from 'vue';
 import { product } from '/@/api/product/index';
 import { detail, trace, actionObj } from './config';
 import { getTime } from '/@/utils/fun/common';
@@ -60,6 +66,7 @@ export default defineComponent({
   },
   emits: ['update'],
   setup(props, { emit }) {
+    const userNameObj = inject('userNameObj');
     const state = reactive({
       title: '物料详情',
       loading1: false,
@@ -109,6 +116,7 @@ export default defineComponent({
     };
     return {
       ...toRefs(state),
+      userNameObj,
       columns,
       columnsTrace,
       update,

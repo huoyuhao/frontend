@@ -14,14 +14,28 @@
       <template #productiveTaskName="{ record, text }">
         <a @click="routeLink(record)">{{ text }}</a>
       </template>
-      <template #targetMaterialIdList="{ text }">
-        <p>{{ text }}</p>
-      </template>
       <template #requiredDate="{ text }">
         <p>{{ getTime(text) }}</p>
       </template>
+      <template #productiveTaskUrgency="{ text }">
+        <p>{{ text === 1 ? '紧急' : '正常' }}</p>
+      </template>
+      <template #productiveTaskStatus="{ text }">
+        <p>{{ text === 1 ? '异常' : '正常' }}</p>
+      </template>
+      <template #user="{ text }">
+        <p>{{ userNameObj[text] || text }}</p>
+      </template>
       <template #action="{ record }">
         <a-button type="primary" size="small" @click="deleteData(record)">删除</a-button>
+      </template>
+      <template #expandedRowRender="{ record }">
+        <d-table
+          :columns="taskMaterial"
+          :data-source="record.rawMaterialList"
+          :rowKey="'rawMaterialId'"
+        >
+        </d-table>
       </template>
     </d-table>
   </d-card>
@@ -29,23 +43,24 @@
     v-model:visible="showModal"
     :form-data="formData"
     :is-modify="Boolean(formData && formData[rowKey])"
-    :userArr="userArr"
     :materialArr="materialArr"
     @update="update"
   />
 </template>
 <script>
-import { defineComponent, reactive, toRefs } from 'vue';
+import { defineComponent, reactive, toRefs, inject } from 'vue';
 import { product } from '/@/api/product/index';
 import { deleteFun } from '/@/utils/operate/index';
-import { list } from './config';
+import { list, taskMaterial } from './config';
 import { useRouter } from 'vue-router';
+import { getTime } from '/@/utils/fun/common';
 import DAdd from './add-data.vue';
 
 export default defineComponent({
   name: 'DProduceTaskData',
   components: { DAdd },
   setup() {
+    const userNameObj = inject('userNameObj');
     const router = useRouter();
     const state = reactive({
       title: '生产计划',
@@ -54,10 +69,8 @@ export default defineComponent({
       rowKey: '',
       showModal: false,
       formData: null,
-      userArr: [],
-      userObj: {},
       materialArr: [],
-      materialObj: {},
+      taskMaterial,
     });
     const api = '/productive/task';
 
@@ -82,21 +95,8 @@ export default defineComponent({
         .catch();
       // 获取物料数据
       product({ api: '/material', method: 'get' }).then((res) => {
-        state.materialArr = [];
-        state.materialObj = {};
-        res.forEach((item) => {
-          state.materialArr.push({ value: item.materialId, label: item.materialName });
-          state.materialObj[item.materialId] = item.materialName;
-        });
-      })
-        .catch();
-
-      product({ api: '/user' }).then((res) => {
-        state.userArr = [];
-        state.userObj = {};
-        res.forEach((item) => {
-          state.userArr.push({ value: item.userId, label: `${item.userCode}(${item.userName})` });
-          state.userObj[item.userId] = item.materialName;
+        state.materialArr =  res.map((item) => {
+          return { value: item.materialId, label: item.materialName };
         });
       })
         .catch();
@@ -107,9 +107,9 @@ export default defineComponent({
     const add = () => {
       state.showModal = true;
       state.formData = {
-        urgency: 0,
-        status: 0,
-        targetMaterialIdList: [],
+        productiveTaskUrgency: 0,
+        productiveTaskStatus: 0,
+        rawMaterialList: [],
       };
     };
     const { deleteModal } = deleteFun();
@@ -129,21 +129,23 @@ export default defineComponent({
       state.formData = item;
     };
     const routeLink = (record) => {
-      const { materialId } = record;
+      const { productiveTaskId } = record;
       router.push({
-        path: '/produce/task/detail',
-        query: { materialId },
+        path: '/produce/task/detail/detail',
+        query: { productiveTaskId },
       });
     };
     query();
     return {
       ...toRefs(state),
+      userNameObj,
       columns,
       routeLink,
       query,
       update,
       add,
       deleteData,
+      getTime,
       modify,
     };
   },

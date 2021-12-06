@@ -9,7 +9,6 @@ export const getMaterialDetail = (rfTagCodeList) => {
   watch(() => {
     return rfTagCodeList.value;
   }, (value) => {
-    console.log(value);
     clearTimeout(timer.value);
     timer.value = setTimeout(() => {
       queryMaterialDetail(value);

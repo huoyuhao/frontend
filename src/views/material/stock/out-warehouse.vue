@@ -36,7 +36,7 @@
   <d-material-detail v-if="materialDetail && materialDetail.length > 0" :data="materialDetail" :loading="loading" @update="queryMaterialDetail"></d-material-detail>
 </template>
 <script>
-import { computed, defineComponent, reactive, toRefs, ref } from 'vue';
+import { computed, defineComponent, reactive, toRefs, inject } from 'vue';
 import { product } from '/@/api/product/index';
 import { message, Form } from 'ant-design-vue';
 import { getMaterialDetail } from './config';
@@ -46,6 +46,7 @@ export default defineComponent({
   name: 'DMaterialEntryFactory',
   components: { DMaterialDetail },
   setup() {
+    const userArr = inject('userArr');
     const state = reactive({
       title: '出库',
       tagStr: '',
@@ -77,16 +78,6 @@ export default defineComponent({
     };
     const { rfTagCodeList } = toRefs(formItem);
     const { loading, materialDetail, queryMaterialDetail } = getMaterialDetail(rfTagCodeList);
-    const userArr = ref([]);
-    const queryUser = () => {
-      product({ api: '/user' }).then((res) => {
-        userArr.value = res.map((item) => {
-          return { value: item.userId, label: `${item.userCode}(${item.userName})` };
-        });
-      })
-        .catch();
-    };
-    queryUser();
     return {
       ...toRefs(state),
       formItem,

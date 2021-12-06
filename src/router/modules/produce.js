@@ -28,7 +28,7 @@ const produce = {
       ],
     },
     {
-      path: '/produce/task',
+      path: '/produce/task/',
       name: 'produce-task',
       redirect: '/produce/task/data',
       meta: { title: '生产计划' },
@@ -37,15 +37,15 @@ const produce = {
         {
           path: '/produce/task/:type',
           name: 'produce-task-type',
-          meta: { title: '生产计划', hideMenu: true },
           component: () => {
             return import('/@/views/produce/task/index.vue');
           },
+          meta: { hideMenu: true },
         },
         {
           path: '/produce/task/detail',
-          name: 'produce-task-type',
-          redirect: '/produce/task/detail/list',
+          name: 'produce-task-detail',
+          redirect: '/produce/task/detail/detail',
           meta: { hideMenu: true },
           component: { template: '<router-view />' },
           children: [

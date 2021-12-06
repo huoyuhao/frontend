@@ -11,6 +11,9 @@
         <a-button type="primary" @click="query">刷新</a-button>
         <a-button type="primary" @click="add">新增</a-button>
       </template>
+      <template #warehouseManagerId="{ text }">
+        <p>{{ userNameObj[text] || text }}</p>
+      </template>
       <template #action="{ record }">
         <a-button type="primary" size="small" @click="deleteData(record)">删除</a-button>
       </template>
@@ -24,7 +27,7 @@
   />
 </template>
 <script>
-import { defineComponent, reactive, toRefs } from 'vue';
+import { defineComponent, reactive, toRefs, inject } from 'vue';
 import { product } from '/@/api/product/index';
 import { deleteFun } from '/@/utils/operate/index';
 import { list } from './config';
@@ -34,6 +37,7 @@ export default defineComponent({
   name: 'DMaterialWarehouseData',
   components: { DAdd },
   setup() {
+    const userNameObj = inject('userNameObj');
     const state = reactive({
       title: '仓库',
       loading: false,
@@ -90,6 +94,7 @@ export default defineComponent({
     query();
     return {
       ...toRefs(state),
+      userNameObj,
       columns,
       query,
       update,

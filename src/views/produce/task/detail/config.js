@@ -1,47 +1,24 @@
 export const detail = [
-  { title: '唯一标识', dataIndex: 'materialEntityId', rowKey: true, hideTable: true },
-  { title: 'RF标签码', dataIndex: 'rfTagCode' },
-  { title: '物料名称', dataIndex: 'materialName', filter: true },
-  { title: '元素数量', dataIndex: 'materialEntityElementNumber' },
-  { title: '物料状态', dataIndex: 'materialEntityStatus', filter: true },
-  { title: '物料位置', dataIndex: 'materialEntityPositionType', slots: { customRender: 'materialEntityPositionType' }, filter: true },
-  { title: '仓库ID', dataIndex: 'materialEntityPosition', filter: true },
-  { title: '经办人', dataIndex: 'ownerId' },
-  { title: '仓库管理员', dataIndex: 'warehouseKeeperId' },
-  { title: '描述', dataIndex: 'description' },
-];
-export const trace = [
-  { title: '唯一标识', dataIndex: 'materialEntityTraceId', rowKey: true, hideTable: true },
-  { title: 'RF标签码', dataIndex: 'rfTagCode' },
-  { title: '操作类型', dataIndex: 'materialEntityAction', slots: { customRender: 'materialEntityAction' } },
-  { title: '物料位置', dataIndex: 'materialEntityPositionType', slots: { customRender: 'materialEntityPositionType' }, filter: true },
-  { title: '仓库ID', dataIndex: 'materialEntityPosition', filter: true },
-  { title: '经办人', dataIndex: 'ownerId' },
-  { title: '仓库管理员', dataIndex: 'warehouseKeeperId' },
-  { title: '时间', dataIndex: 'createTime', slots: { customRender: 'createTime' } },
+  { title: '唯一标识', dataIndex: 'productiveSubTaskId', rowKey: true, hideTable: true, hideForm: true },
+  { title: '⼯序名称', dataIndex: 'productiveSubTaskName', required: true },
+  { title: '⽣产计划', dataIndex: 'productiveTaskId', hideForm: true, hideTable: true, required: true },
+  { title: '⽣产计划', dataIndex: 'productiveTaskName', hideForm: true },
+  { title: '⽬标物料', dataIndex: 'targetMaterialId', hideTable: true, required: true },
+  { title: '⽬标物料', dataIndex: 'targetMaterialName', hideForm: true },
+  { title: '目标物料数量', dataIndex: 'targetMaterialNum' },
+  { title: '标准⼯序', dataIndex: 'standardProcessId', required: true },
+  { title: '⼯序状态', dataIndex: 'productiveSubTaskStatus', hideForm: true },
+  { title: '原材料', dataIndex: 'rawMaterialList', hideTable: true, slots: { customRender: 'rawMaterialList' } },
+  { title: '计划开始时间', dataIndex: 'scheduledStartTime', required: true, slots: { customRender: 'date' }  },
+  { title: '计划结束时间', dataIndex: 'scheduledEndTime', required: true, slots: { customRender: 'date' }  },
   { title: '描述', dataIndex: 'description' },
 ];
 
-export const record = [
-  { title: '唯一标识', dataIndex: 'storeRecordId', rowKey: true, hideTable: true },
-  { title: '操作类型', dataIndex: 'materialEntityAction', slots: { customRender: 'materialEntityAction' } },
-  { title: '物料位置', dataIndex: 'materialEntityPositionType', slots: { customRender: 'materialEntityPositionType' }, filter: true },
-  { title: '仓库ID', dataIndex: 'materialEntityPosition' },
-  { title: '物料件数量', dataIndex: 'materialEntityNum', slots: { customRender: 'materialEntityNum' } },
-  { title: '元素数量', dataIndex: 'materialEntityElementNumber' },
-  { title: '经办人', dataIndex: 'ownerId' },
-  { title: '仓库管理员', dataIndex: 'warehouseKeeperId' },
-  // { title: 'RF标签', dataIndex: 'rfTagCodeList', slots: { customRender: 'rfTagCodeList' } },
-  { title: '时间', dataIndex: 'createTime', slots: { customRender: 'createTime' } },
-  { title: '描述', dataIndex: 'description' },
+export const taskMaterial = [
+  { title: '物料ID', dataIndex: 'rawMaterialId', rowKey: true },
+  { title: '物料代码', dataIndex: 'rawMaterialCode' },
+  { title: '物料名称', dataIndex: 'rawMaterialName' },
+  { title: '物料数量', dataIndex: 'rawMaterialNum' },
 ];
 
-export const actionObj = {
-  0: '入厂',
-  1: '出库',
-  2: '入库',
-  3: '出厂',
-  4: '用尽',
-  5: '生产中',
-  6: '重定位',
-};
+// 正常，⽣产中，撤销，暂停，完成

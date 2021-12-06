@@ -3,9 +3,10 @@ export const list = [
   { title: '工序代码', dataIndex: 'standardProcessCode', required: true },
   { title: '工序名称', dataIndex: 'standardProcessName', required: true },
   { title: '助记码', dataIndex: 'standardProcessMnemonic', required: true },
-  { title: '目标物料', dataIndex: 'targetMaterialId', required: true, slots: { customRender: 'targetMaterialId' } },
+  { title: '⽬标物料', dataIndex: 'targetMaterialId', hideTable: true },
+  { title: '⽬标物料', dataIndex: 'targetMaterialName', hideForm: true },
   { title: '目标物料数量', dataIndex: 'targetMaterialNum' },
-  { title: '原材料', dataIndex: 'rawMaterialList', required: true, slots: { customRender: 'rawMaterialList' } },
+  { title: '原材料', dataIndex: 'rawMaterialList', hideTable: true, slots: { customRender: 'rawMaterialList' } },
   { title: '合格率', dataIndex: 'pass', required: true },
   { title: '备注', dataIndex: 'description' },
 ];

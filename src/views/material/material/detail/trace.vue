@@ -22,6 +22,9 @@
       <template #createTime="{ text }">
         <p>{{ getTime(text) }}</p>
       </template>
+      <template #user="{ text }">
+        <p>{{ userNameObj[text] || text }}</p>
+      </template>
       <template #rfTagCodeList="{ text }">
         <p>{{ text && text.length > 0 && text.join(',') }}</p>
       </template>
@@ -41,7 +44,7 @@
   </a-modal>
 </template>
 <script>
-import { defineComponent, reactive, toRefs } from 'vue';
+import { defineComponent, reactive, toRefs, inject } from 'vue';
 import { product } from '/@/api/product/index';
 import { record, actionObj } from './config';
 import { useRoute } from 'vue-router';
@@ -50,6 +53,7 @@ export default defineComponent({
   name: 'DMaterialMaterialDetailRecord',
   components: { },
   setup() {
+    const userNameObj = inject('userNameObj');
     const route = useRoute();
     const state = reactive({
       title: '出入库记录',
@@ -91,6 +95,7 @@ export default defineComponent({
     query();
     return {
       ...toRefs(state),
+      userNameObj,
       columns,
       query,
       update,

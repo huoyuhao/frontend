@@ -1,7 +1,7 @@
 export const type = [
   { title: '唯一标识', dataIndex: 'materialTypeId', rowKey: true, hideTable: true, hideForm: true },
-  { title: '物料组别代码', dataIndex: 'materialTypeCode', required: true },
-  { title: '物料组别名称', dataIndex: 'materialTypeName', required: true },
+  { title: '物料类型代码', dataIndex: 'materialTypeCode', required: true },
+  { title: '物料类型名称', dataIndex: 'materialTypeName', required: true },
   { title: '助记码', dataIndex: 'materialTypeMnemonic', required: true },
   { title: '备注', dataIndex: 'description' },
 ];

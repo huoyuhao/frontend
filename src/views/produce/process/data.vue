@@ -11,9 +11,6 @@
         <a-button type="primary" @click="query">刷新</a-button>
         <a-button type="primary" @click="add">新增</a-button>
       </template>
-      <template #targetMaterialId="{ text }">
-        <p>{{ materialObj[text] }}</p>
-      </template>
       <template #action="{ record }">
         <a-button type="primary" size="small" @click="deleteData(record)">删除</a-button>
       </template>
@@ -54,7 +51,6 @@ export default defineComponent({
       showModal: false,
       formData: null,
       materialArr: [],
-      materialObj: {},
       taskMaterial,
     });
     const api = '/standard/process';
@@ -80,11 +76,8 @@ export default defineComponent({
         .catch();
       // 获取物料数据
       product({ api: '/material', method: 'get' }).then((res) => {
-        state.materialArr = [];
-        state.materialObj = {};
-        res.forEach((item) => {
-          state.materialArr.push({ value: item.materialId, label: item.materialName });
-          state.materialObj[item.materialId] = item.materialName;
+        state.materialArr =  res.map((item) => {
+          return { value: item.materialId, label: item.materialName };
         });
       })
         .catch();
@@ -94,7 +87,9 @@ export default defineComponent({
     };
     const add = () => {
       state.showModal = true;
-      state.formData = {};
+      state.formData = {
+        rawMaterialList: [],
+      };
     };
     const { deleteModal } = deleteFun();
     const deleteData = (item) => {

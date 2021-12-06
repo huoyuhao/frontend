@@ -19,6 +19,15 @@
             :options="dataType"
           />
         </a-form-item>
+        <a-form-item v-else-if="item.dataIndex === 'warehouseManagerId'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
+          <a-select
+            v-model:value="formItem[item.dataIndex]"
+            placeholder="请选择"
+            show-search
+            option-filter-prop="label"
+            :options="userArr"
+          />
+        </a-form-item>
         <a-form-item v-else-if="!item.hideForm" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
           <a-input v-model:value="formItem[item.dataIndex]" />
         </a-form-item>
@@ -27,7 +36,7 @@
   </a-modal>
 </template>
 <script>
-import { defineComponent, reactive, toRefs, ref, watch } from 'vue';
+import { defineComponent, reactive, toRefs, ref, watch, inject } from 'vue';
 import { product } from '/@/api/product/index';
 import { addFun } from '/@/utils/operate/index';
 import { list } from './config';
@@ -58,6 +67,7 @@ export default defineComponent({
     const api = '/warehouse';
     const formItem = reactive({});
     const ruleValidate = reactive({});
+    const userArr = inject('userArr');
 
     list.forEach((item) => {
       const { title, dataIndex } = item;
@@ -91,6 +101,7 @@ export default defineComponent({
       },
     );
     return {
+      userArr,
       dataType,
       list,
       formItem,

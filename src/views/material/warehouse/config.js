@@ -6,10 +6,10 @@ export const type = [
   { title: '备注', dataIndex: 'description' },
 ];
 export const list = [
-  { title: '唯一标识', dataIndex: 'warehouseId', rowKey: true, hideForm: true },
+  { title: '唯一标识', dataIndex: 'warehouseId', rowKey: true, hideTable: true, hideForm: true },
   { title: '仓库代码', dataIndex: 'warehouseCode', required: true },
   { title: '仓库名', dataIndex: 'warehouseName', required: true },
-  { title: '仓库管理员id', dataIndex: 'warehouseManagerId', required: true },
+  { title: '仓库管理员id', dataIndex: 'warehouseManagerId', required: true, slots: { customRender: 'warehouseManagerId' } },
   { title: '仓库地址', dataIndex: 'warehouseAddress', required: true },
   { title: '仓库座机号码', dataIndex: 'warehouseLandlineNumber', required: true },
   { title: '仓库类型', dataIndex: 'warehouseTypeId', hideTable: true, hideForm: true, required: true },
