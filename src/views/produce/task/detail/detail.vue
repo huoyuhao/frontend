@@ -10,14 +10,24 @@
       <template #header>
         <a-button type="primary" @click="query">刷新</a-button>
         <a-button type="primary" @click="add">新增</a-button>
-        <a-button type="primary" @click="taskStatus('start')">启动</a-button>
-        <a-button type="primary" @click="taskStatus('finish')">完成</a-button>
       </template>
       <template #date="{ text }">
         <p>{{ getTime(text) }}</p>
       </template>
       <template #action="{ record }">
-        <a-button type="primary" size="small" @click="deleteData(record)">删除</a-button>
+        <a-dropdown placement="bottomCenter">
+          <a @click.prevent>
+            操作
+            <DownOutlined />
+          </a>
+          <template #overlay>
+            <a-menu>
+              <a-menu-item key="start"><a @click="taskStatus(record, 'start')">启动</a></a-menu-item>
+              <a-menu-item key="finish"><a @click="taskStatus(record, 'finish')">完成</a></a-menu-item>
+              <a-menu-item key="delete"><a @click="deleteData(record)">删除</a></a-menu-item>
+            </a-menu>
+          </template>
+        </a-dropdown>
       </template>
       <template #expandedRowRender="{ record }">
         <d-table
@@ -118,9 +128,11 @@ export default defineComponent({
       state.showModal = true;
       state.formData = item;
     };
-    const taskStatus = (type) => {
-      product({ api: `/productive/sub/task/${type}?productiveTaskId=${productiveTaskId}`, method: 'put' }).then(() => {
+    const taskStatus = (record, type) => {
+      const { productiveSubTaskId } = record;
+      product({ api: `/productive/sub/task/${type}?productiveSubTaskId=${productiveSubTaskId}`, method: 'put', data: { productiveSubTaskId } }).then(() => {
         message.success('修改工序状态成功');
+        update();
       })
         .catch();
     };

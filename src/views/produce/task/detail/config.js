@@ -1,8 +1,7 @@
 export const detail = [
   { title: '唯一标识', dataIndex: 'productiveSubTaskId', rowKey: true, hideTable: true, hideForm: true },
   { title: '⼯序名称', dataIndex: 'productiveSubTaskName', required: true },
-  { title: '⽣产计划', dataIndex: 'productiveTaskId', hideForm: true, hideTable: true, required: true },
-  { title: '⽣产计划', dataIndex: 'productiveTaskName', hideForm: true },
+  // { title: '⽣产计划', dataIndex: 'productiveTaskId', hideForm: true, hideTable: true, required: true },
   { title: '⽬标物料', dataIndex: 'targetMaterialId', hideTable: true, required: true },
   { title: '⽬标物料', dataIndex: 'targetMaterialName', hideForm: true },
   { title: '目标物料数量', dataIndex: 'targetMaterialNum' },
