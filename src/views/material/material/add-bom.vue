@@ -40,7 +40,8 @@
                 />
               </a-col>
               <a-col span="11" offset="2">
-                <a-input-number v-model:value="element.rawMaterialNum" placeholder="请输入原材料数量" />
+                <a-input-number v-model:value="element.rawMaterialNum" placeholder="请输入原材料数量"
+                :formatter="value => `${value}${materialObj[element.rawMaterialId] || '' }`" :parser="value => value.replace(`${materialObj[element.rawMaterialId] || '' }`, '')" />
               </a-col>
               <a-col span="1">
                 <MinusCircleOutlined
@@ -114,10 +115,14 @@ export default defineComponent({
 
     const { visibleModal, close, submit } = addFun(toRefs(props), emit, { resetFields, validate }, { formItem, api });
     const materialArr = ref([]);
+    const materialObj = ref({});
     const query = () => {
       product({ api: '/material', method: 'get' }).then((res) => {
-        materialArr.value = res.map((item) => {
-          return { value: item.materialId, label: item.materialName };
+        materialArr.value = [];
+        materialObj.value = {};
+        res.forEach((item) => {
+          materialArr.value.push({ value: item.materialId, label: item.materialName });
+          materialObj.value[item.materialId] = item?.materialUnit?.materialUnitName || '';
         });
       })
         .catch();
@@ -140,6 +145,7 @@ export default defineComponent({
       addRawMaterialList,
       removeRawMaterialList,
       materialArr,
+      materialObj,
       bom,
       formItem,
       visibleModal,

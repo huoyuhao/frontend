@@ -11,13 +11,23 @@
         <a-button type="primary" @click="query">刷新</a-button>
         <a-button type="primary" @click="add">新增</a-button>
       </template>
+      <template #noteType="{ text }">
+        <p>{{ noteTypeObj[text] || text}}</p>
+      </template>
+      <template #redBlue="{ text }">
+        <a-tag v-if="text === 0" color="red">红单</a-tag>
+        <a-tag v-else-if="text === 1" color="blue">蓝单</a-tag>
+      </template>
+      <template #user="{ text }">
+        <p>{{ userNameObj[text] || text }}</p>
+      </template>
       <template #action="{ record }">
         <a-button type="primary" size="small" @click="deleteData(record)">删除</a-button>
       </template>
       <template #expandedRowRender="{ record }">
         <d-table
-          :columns="taskMaterial"
-          :data-source="record.rawMaterialList"
+          :columns="materialColumns"
+          :data-source="record.materialList"
           :rowKey="'rawMaterialId'"
         >
         </d-table>
@@ -34,18 +44,19 @@
   />
 </template>
 <script>
-import { defineComponent, reactive, toRefs } from 'vue';
+import { defineComponent, reactive, toRefs, inject } from 'vue';
 import { product } from '/@/api/product/index';
 import { deleteFun } from '/@/utils/operate/index';
-import { list, taskMaterial } from './config';
+import { list, materialColumns, noteTypeObj } from './config';
 import DAdd from './add-data.vue';
 
 export default defineComponent({
   name: 'DProduceProcessData',
   components: { DAdd },
   setup() {
+    const userNameObj = inject('userNameObj');
     const state = reactive({
-      title: '生产工序',
+      title: '单据列表',
       loading: false,
       data: [],
       rowKey: '',
@@ -53,9 +64,10 @@ export default defineComponent({
       formData: null,
       materialArr: [],
       materialObj: {},
-      taskMaterial,
+      materialColumns,
+      noteTypeObj,
     });
-    const api = '/standard/process';
+    const api = '/note';
 
     const columns = [];
     list.forEach((item) => {
@@ -93,7 +105,7 @@ export default defineComponent({
     const add = () => {
       state.showModal = true;
       state.formData = {
-        rawMaterialList: [],
+        materialList: [],
       };
     };
     const { deleteModal } = deleteFun();
@@ -115,6 +127,7 @@ export default defineComponent({
     query();
     return {
       ...toRefs(state),
+      userNameObj,
       columns,
       query,
       update,

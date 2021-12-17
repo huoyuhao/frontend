@@ -69,7 +69,7 @@
                 />
               </a-col>
               <a-col span="11" offset="2">
-                <a-input-number v-model:value="element.rawMaterialNum" placeholder="请输入原材料数量" />
+                <a-input-number v-model:value="element.rawMaterialNum" placeholder="请输入原材料数量" :formatter="value => `${value}${materialObj[element.rawMaterialId] || '' }`" :parser="value => value.replace(`${materialObj[element.rawMaterialId] || '' }`, '')" />
               </a-col>
               <a-col span="1">
                 <MinusCircleOutlined
@@ -137,6 +137,7 @@ export default defineComponent({
       default: false,
     },
     materialArr: Array,
+    materialObj: Object,
   },
   setup(props, { emit }) {
     const userArr = inject('userArr');

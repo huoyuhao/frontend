@@ -11,7 +11,7 @@
         <a-button type="primary" @click="query">刷新</a-button>
         <a-button type="primary" @click="add">新增</a-button>
       </template>
-      <template #warehouseManagerId="{ text }">
+      <template #user="{ text }">
         <p>{{ userNameObj[text] || text }}</p>
       </template>
       <template #action="{ record }">

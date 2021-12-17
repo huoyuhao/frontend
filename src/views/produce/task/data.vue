@@ -44,6 +44,7 @@
     :form-data="formData"
     :is-modify="Boolean(formData && formData[rowKey])"
     :materialArr="materialArr"
+    :materialObj="materialObj"
     @update="update"
   />
 </template>
@@ -70,6 +71,7 @@ export default defineComponent({
       showModal: false,
       formData: null,
       materialArr: [],
+      materialObj: {},
       taskMaterial,
     });
     const api = '/productive/task';
@@ -95,8 +97,11 @@ export default defineComponent({
         .catch();
       // 获取物料数据
       product({ api: '/material', method: 'get' }).then((res) => {
-        state.materialArr =  res.map((item) => {
-          return { value: item.materialId, label: item.materialName };
+        state.materialArr = [];
+        state.materialObj = {};
+        res.forEach((item) => {
+          state.materialArr.push({ value: item.materialId, label: item.materialName });
+          state.materialObj[item.materialId] = item?.materialUnit?.materialUnitName || '';
         });
       })
         .catch();

@@ -9,33 +9,18 @@
     @cancel="close"
   >
     <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 14 }">
-      <template v-for="item in detail">
-        <a-form-item v-if="item.dataIndex === 'standardProcessId'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
-          <a-select
-            v-model:value="formItem[item.dataIndex]"
-            placeholder="请选择"
-            show-search
-            option-filter-prop="label"
-            :options="processArr"
-          />
-        </a-form-item>
-        <a-form-item v-else-if="['scheduledStartTime', 'scheduledEndTime'].includes(item.dataIndex)" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
-          <a-date-picker
-            v-model:value="formItem[item.dataIndex]"
-            type="date"
-            placeholder="请选择"
-            style="width: 100%"
-          />
-        </a-form-item>
-        <a-form-item v-else-if="item.dataIndex === 'targetMaterialNum'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
+      <template v-for="item in list">
+        <a-form-item v-if="item.dataIndex === 'targetMaterialNum'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
           <a-input-number v-model:value="formItem[item.dataIndex]" :placeholder="`请输入${item.title}`" />
+        </a-form-item>
+        <a-form-item v-else-if="item.dataIndex === 'pass'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
+          <a-input-number v-model:value="formItem[item.dataIndex]" :placeholder="`请输入${item.title}`" :max="100" :min="0" :formatter="value => `${value}%`" :parser="value => value.replace('%', '')" />
         </a-form-item>
         <template v-else-if="item.dataIndex === 'rawMaterialList'">
           <a-form-item
             v-for="(element, index) in formItem.rawMaterialList"
             :key="element + item + index"
             :label="item.title"
-            :disabled="true"
             :name="['domains1', index, 'value']"
           >
             <a-row align="middle">
@@ -51,7 +36,21 @@
               <a-col span="11" offset="2">
                 <a-input-number v-model:value="element.rawMaterialNum" placeholder="请输入原材料数量" :formatter="value => `${value}${materialObj[element.rawMaterialId] || '' }`" :parser="value => value.replace(`${materialObj[element.rawMaterialId] || '' }`, '')" />
               </a-col>
+              <a-col span="1">
+                <MinusCircleOutlined
+                  v-if="formItem.rawMaterialList.length > 1"
+                  class="dynamic-delete-button"
+                  :disabled="formItem.rawMaterialList.length === 1"
+                  @click="removeRawMaterialList(element)"
+                />
+              </a-col>
             </a-row>
+          </a-form-item>
+          <a-form-item :key="item.dataIndex">
+            <a-button type="dashed" style="width: 60%; margin-left: 190px" @click="addRawMaterialList">
+              <PlusOutlined />
+              新增物料
+            </a-button>
           </a-form-item>
         </template>
         <a-form-item v-else-if="!item.hideForm" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
@@ -62,16 +61,15 @@
   </a-modal>
 </template>
 <script>
-import { defineComponent, reactive, toRefs, ref, watch } from 'vue';
+import { defineComponent, reactive, toRefs } from 'vue';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons-vue';
 import { addFun } from '/@/utils/operate/index';
-import { detail } from './config';
+import { list } from './config';
 import { Form } from 'ant-design-vue';
-import { product } from '/@/api/product/index';
 
 export default defineComponent({
-  name: 'DAddTaskData',
-  components: {
-  },
+  name: 'DAddProcessData',
+  components: { MinusCircleOutlined, PlusOutlined },
   props: {
     visible: {
       required: true,
@@ -93,11 +91,11 @@ export default defineComponent({
     materialObj: Object,
   },
   setup(props, { emit }) {
-    const api = '/productive/sub/task';
+    const api = '/standard/process';
     const formItem = reactive({});
     const ruleValidate = reactive({});
 
-    detail.forEach((item) => {
+    list.forEach((item) => {
       const { title, dataIndex } = item;
       if (item.required) {
         ruleValidate[dataIndex] = [{ required: true, message: `${title}不能为空！` }];
@@ -109,39 +107,22 @@ export default defineComponent({
 
     const { visibleModal, close, submit } = addFun(toRefs(props), emit, { resetFields, validate }, { formItem, api });
 
-    const processObj = ref(null);
-    const processArr = ref([]);
-    const queryProcess = () => {
-      product({ api: '/standard/process', method: 'get' }).then((res) => {
-        processArr.value = [];
-        processObj.value = {};
-        res.forEach((item) => {
-          processArr.value.push({ value: item.standardProcessId, label: item.standardProcessName });
-          processObj[item.standardProcessId] = item;
-        });
-      })
-        .catch();
+    const addRawMaterialList = () => {
+      formItem.rawMaterialList.push({
+        rawMaterialId: null,
+        rawMaterialNum: null,
+      });
     };
-    watch(
-      () => {
-        return [formItem.standardProcessId, formItem.targetMaterialNum];
-      },
-      () => {
-        if (formItem.standardProcessId) {
-          if (!formItem.targetMaterialNum) return ;
-          const { targetMaterialId, standardProcessName, rawMaterialList } = processObj[formItem.standardProcessId];
-          formItem.targetMaterialId = targetMaterialId;
-          formItem.productiveSubTaskName = standardProcessName;
-          formItem.rawMaterialList = rawMaterialList.map((item) => {
-            return { rawMaterialId: item.rawMaterialId, rawMaterialNum: item.rawMaterialNum * formItem.targetMaterialNum };
-          });
-        }
-      },
-    );
-    queryProcess();
+    const removeRawMaterialList = (item) => {
+      const index = formItem.rawMaterialList.indexOf(item);
+      if (index !== -1) {
+        formItem.rawMaterialList.splice(index, 1);
+      }
+    };
     return {
-      processArr,
-      detail,
+      addRawMaterialList,
+      removeRawMaterialList,
+      list,
       formItem,
       visibleModal,
       validateInfos,

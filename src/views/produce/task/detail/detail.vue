@@ -25,6 +25,7 @@
               <a-menu-item key="start"><a @click="taskStatus(record, 'start')">启动</a></a-menu-item>
               <a-menu-item key="finish"><a @click="taskStatus(record, 'finish')">完成</a></a-menu-item>
               <a-menu-item key="delete"><a @click="deleteData(record)">删除</a></a-menu-item>
+              <a-menu-item key="note"><a @click="note(record)">领料出库</a></a-menu-item>
             </a-menu>
           </template>
         </a-dropdown>
@@ -44,6 +45,7 @@
     :form-data="formData"
     :is-modify="Boolean(formData && formData[rowKey])"
     :materialArr="materialArr"
+    :materialObj="materialObj"
     @update="update"
   />
 </template>
@@ -55,6 +57,7 @@ import { detail, taskMaterial } from './config';
 import { getTime } from '/@/utils/fun/common';
 import { useRoute } from 'vue-router';
 import { message } from 'ant-design-vue';
+import { modalFun } from '/@/utils/operate/modal';
 import DAdd from './add.vue';
 
 export default defineComponent({
@@ -70,6 +73,7 @@ export default defineComponent({
       showModal: false,
       formData: null,
       materialArr: [],
+      materialObj: {},
       taskMaterial,
     });
     const { productiveTaskId } = route.query;
@@ -96,8 +100,11 @@ export default defineComponent({
         .catch();
       // 获取物料数据
       product({ api: '/material', method: 'get' }).then((res) => {
-        state.materialArr =  res.map((item) => {
-          return { value: item.materialId, label: item.materialName };
+        state.materialArr = [];
+        state.materialObj = {};
+        res.forEach((item) => {
+          state.materialArr.push({ value: item.materialId, label: item.materialName });
+          state.materialObj[item.materialId] = item?.materialUnit?.materialUnitName || '';
         });
       })
         .catch();
@@ -128,13 +135,22 @@ export default defineComponent({
       state.showModal = true;
       state.formData = item;
     };
+    const note = (item) => {
+      state.showNoteModal = true;
+      state.formNoteData = {
+        materialList: item.rawMaterialList,
+      };
+    };
     const taskStatus = (record, type) => {
-      const { productiveSubTaskId } = record;
-      product({ api: `/productive/sub/task/${type}?productiveSubTaskId=${productiveSubTaskId}`, method: 'put', data: { productiveSubTaskId } }).then(() => {
-        message.success('修改工序状态成功');
-        update();
-      })
-        .catch();
+      const { confirmModal } = modalFun();
+      confirmModal({ title: '修改工序状态提示', content: '此操作将修改工序状态, 是否继续?' }, () => {
+        const { productiveSubTaskId } = record;
+        product({ api: `/productive/sub/task/${type}?productiveSubTaskId=${productiveSubTaskId}`, method: 'put', data: { productiveSubTaskId } }).then(() => {
+          message.success('修改工序状态成功');
+          update();
+        })
+          .catch();
+      });
     };
     query();
     return {

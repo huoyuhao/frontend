@@ -23,7 +23,7 @@
           <a-input-number v-model:value="formItem[item.dataIndex]" :placeholder="`请输入${item.title}`" />
         </a-form-item>
         <a-form-item v-else-if="item.dataIndex === 'pass'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
-          <a-input-number v-model:value="formItem[item.dataIndex]" :placeholder="`请输入${item.title}`" :max="100" :min="0" />
+          <a-input-number v-model:value="formItem[item.dataIndex]" :placeholder="`请输入${item.title}`" :max="100" :min="0" :formatter="value => `${value}%`" :parser="value => value.replace('%', '')" />
         </a-form-item>
         <template v-else-if="item.dataIndex === 'rawMaterialList'">
           <a-form-item
@@ -43,7 +43,7 @@
                 />
               </a-col>
               <a-col span="11" offset="2">
-                <a-input-number v-model:value="element.rawMaterialNum" placeholder="请输入原材料数量" />
+                <a-input-number v-model:value="element.rawMaterialNum" placeholder="请输入原材料数量" :formatter="value => `${value}${materialObj[element.rawMaterialId] || '' }`" :parser="value => value.replace(`${materialObj[element.rawMaterialId] || '' }`, '')" />
               </a-col>
               <a-col span="1">
                 <MinusCircleOutlined
@@ -97,6 +97,7 @@ export default defineComponent({
       default: false,
     },
     materialArr: Array,
+    materialObj: Object,
   },
   setup(props, { emit }) {
     const api = '/standard/process';
