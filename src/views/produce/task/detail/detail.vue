@@ -48,6 +48,14 @@
     :materialObj="materialObj"
     @update="update"
   />
+  <d-add-note
+    v-model:visible="showNoteModal"
+    :form-data="formNoteData"
+    :is-modify="Boolean(formNoteData && formNoteData[rowKey])"
+    :materialArr="materialArr"
+    :materialObj="materialObj"
+    @update="update"
+  />
 </template>
 <script>
 import { defineComponent, reactive, toRefs } from 'vue';
@@ -59,10 +67,11 @@ import { useRoute } from 'vue-router';
 import { message } from 'ant-design-vue';
 import { modalFun } from '/@/utils/operate/modal';
 import DAdd from './add.vue';
+import DAddNote from '../../../note/add-data.vue';
 
 export default defineComponent({
   name: 'DProduceTaskDetail',
-  components: { DAdd },
+  components: { DAdd, DAddNote },
   setup() {
     const route = useRoute();
     const state = reactive({
@@ -75,6 +84,8 @@ export default defineComponent({
       materialArr: [],
       materialObj: {},
       taskMaterial,
+      showNoteModal: false,
+      formNoteData: null,
     });
     const { productiveTaskId } = route.query;
     const api = `/productive/sub/task?productiveTaskId=${productiveTaskId}`;
@@ -136,9 +147,11 @@ export default defineComponent({
       state.formData = item;
     };
     const note = (item) => {
+      console.log(item);
       state.showNoteModal = true;
       state.formNoteData = {
         materialList: item.rawMaterialList,
+        noteType: 0,
       };
     };
     const taskStatus = (record, type) => {
@@ -159,6 +172,7 @@ export default defineComponent({
       query,
       update,
       add,
+      note,
       deleteData,
       taskStatus,
       getTime,

@@ -7,7 +7,7 @@ const note = {
   redirect: '/note/data',
   meta: {
     title: '单据管理',
-    icon: 'OrderedListOutlined',
+    icon: 'FileOutlined',
   },
   children: [
     {

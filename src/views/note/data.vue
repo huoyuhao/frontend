@@ -11,13 +11,6 @@
         <a-button type="primary" @click="query">刷新</a-button>
         <a-button type="primary" @click="add">新增</a-button>
       </template>
-      <template #noteType="{ text }">
-        <p>{{ noteTypeObj[text] || text}}</p>
-      </template>
-      <template #redBlue="{ text }">
-        <a-tag v-if="text === 0" color="red">红单</a-tag>
-        <a-tag v-else-if="text === 1" color="blue">蓝单</a-tag>
-      </template>
       <template #user="{ text }">
         <p>{{ userNameObj[text] || text }}</p>
       </template>
@@ -47,11 +40,11 @@
 import { defineComponent, reactive, toRefs, inject } from 'vue';
 import { product } from '/@/api/product/index';
 import { deleteFun } from '/@/utils/operate/index';
-import { list, materialColumns, noteTypeObj } from './config';
+import { list, materialColumns } from './config';
 import DAdd from './add-data.vue';
 
 export default defineComponent({
-  name: 'DProduceProcessData',
+  name: 'DNoteData',
   components: { DAdd },
   setup() {
     const userNameObj = inject('userNameObj');
@@ -65,7 +58,6 @@ export default defineComponent({
       materialArr: [],
       materialObj: {},
       materialColumns,
-      noteTypeObj,
     });
     const api = '/note';
 
@@ -106,6 +98,7 @@ export default defineComponent({
       state.showModal = true;
       state.formData = {
         materialList: [],
+        redBlue: 0,
       };
     };
     const { deleteModal } = deleteFun();

@@ -38,7 +38,7 @@ import DTabs from './tabs/index.vue';
 import DTabView from './tabs/tabs-views.vue';
 // import DTabPane from './tabs/tab-pane.vue';
 
-import { DownOutlined, SettingOutlined, MenuUnfoldOutlined, MenuFoldOutlined, AppstoreOutlined, SearchOutlined, CloudDownloadOutlined, OrderedListOutlined } from '@ant-design/icons-vue';
+import { DownOutlined, SettingOutlined, MenuUnfoldOutlined, MenuFoldOutlined, AppstoreOutlined, SearchOutlined, CloudDownloadOutlined, OrderedListOutlined, FileOutlined } from '@ant-design/icons-vue';
 
 message.config({ maxCount: 1, top: '80px' }); // 最大显示数, 超过限制时，最早的消息会被自动关闭
 
@@ -101,6 +101,7 @@ export const registerGlobComp = (app) => {
       app.component('OrderedListOutlined', OrderedListOutlined);
       app.component('SearchOutlined', SearchOutlined);
       app.component('CloudDownloadOutlined', CloudDownloadOutlined);
+      app.component('FileOutlined', FileOutlined);
     },
   };
   app.use(Ant);

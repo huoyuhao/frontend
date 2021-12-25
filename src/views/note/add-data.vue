@@ -10,15 +10,33 @@
   >
     <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 14 }">
       <template v-for="item in list">
-        <a-form-item v-if="item.dataIndex === 'targetMaterialNum'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
-          <a-input-number v-model:value="formItem[item.dataIndex]" :placeholder="`请输入${item.title}`" />
+        <a-form-item v-if="item.dataIndex === 'redBlue'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
+          <a-radio-group v-model:value="formItem[item.dataIndex]" button-style="solid">
+            <a-radio-button :value="0">红单</a-radio-button>
+            <a-radio-button :value="1">蓝单</a-radio-button>
+          </a-radio-group>
         </a-form-item>
-        <a-form-item v-else-if="item.dataIndex === 'pass'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
-          <a-input-number v-model:value="formItem[item.dataIndex]" :placeholder="`请输入${item.title}`" :max="100" :min="0" :formatter="value => `${value}%`" :parser="value => value.replace('%', '')" />
+        <a-form-item v-else-if="['ownerUserId', 'handlerUserId'].includes(item.dataIndex)" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
+          <a-select
+            v-model:value="formItem[item.dataIndex]"
+            placeholder="请选择"
+            show-search
+            option-filter-prop="label"
+            :options="userArr"
+          />
         </a-form-item>
-        <template v-else-if="item.dataIndex === 'rawMaterialList'">
+        <a-form-item v-else-if="item.dataIndex === 'noteType'" :key="item.dataIndex" :label="item.title" v-bind="validateInfos[item.dataIndex]">
+          <a-select
+            v-model:value="formItem[item.dataIndex]"
+            placeholder="请选择"
+            show-search
+            option-filter-prop="label"
+            :options="noteTypeArr"
+          />
+        </a-form-item>
+        <template v-else-if="item.dataIndex === 'materialList'">
           <a-form-item
-            v-for="(element, index) in formItem.rawMaterialList"
+            v-for="(element, index) in formItem.materialList"
             :key="element + item + index"
             :label="item.title"
             :name="['domains1', index, 'value']"
@@ -38,9 +56,9 @@
               </a-col>
               <a-col span="1">
                 <MinusCircleOutlined
-                  v-if="formItem.rawMaterialList.length > 1"
+                  v-if="formItem.materialList.length > 1"
                   class="dynamic-delete-button"
-                  :disabled="formItem.rawMaterialList.length === 1"
+                  :disabled="formItem.materialList.length === 1"
                   @click="removeRawMaterialList(element)"
                 />
               </a-col>
@@ -61,15 +79,15 @@
   </a-modal>
 </template>
 <script>
-import { defineComponent, reactive, toRefs } from 'vue';
+import { defineComponent, reactive, toRefs, inject } from 'vue';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons-vue';
 import { addFun } from '/@/utils/operate/index';
-import { list } from './config';
-import { Form } from 'ant-design-vue';
+import { list, noteTypeArr } from './config';
+import { Form, Radio } from 'ant-design-vue';
 
 export default defineComponent({
-  name: 'DAddProcessData',
-  components: { MinusCircleOutlined, PlusOutlined },
+  name: 'DAddNoteData',
+  components: { MinusCircleOutlined, PlusOutlined, 'a-radio-group': Radio.Group, 'a-radio-button': Radio.Button },
   props: {
     visible: {
       required: true,
@@ -91,9 +109,10 @@ export default defineComponent({
     materialObj: Object,
   },
   setup(props, { emit }) {
-    const api = '/standard/process';
+    const api = '/note';
     const formItem = reactive({});
     const ruleValidate = reactive({});
+    const userArr = inject('userArr');
 
     list.forEach((item) => {
       const { title, dataIndex } = item;
@@ -108,21 +127,23 @@ export default defineComponent({
     const { visibleModal, close, submit } = addFun(toRefs(props), emit, { resetFields, validate }, { formItem, api });
 
     const addRawMaterialList = () => {
-      formItem.rawMaterialList.push({
+      formItem.materialList.push({
         rawMaterialId: null,
         rawMaterialNum: null,
       });
     };
     const removeRawMaterialList = (item) => {
-      const index = formItem.rawMaterialList.indexOf(item);
+      const index = formItem.materialList.indexOf(item);
       if (index !== -1) {
-        formItem.rawMaterialList.splice(index, 1);
+        formItem.materialList.splice(index, 1);
       }
     };
     return {
       addRawMaterialList,
       removeRawMaterialList,
       list,
+      userArr,
+      noteTypeArr,
       formItem,
       visibleModal,
       validateInfos,
